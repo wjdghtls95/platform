@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import authDatabaseConfig from './auth-database.config';
+import platformDatabaseConfig from './platform-database.config';
 
 const environment = process.env.NODE_ENV || 'test';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `./config/.auth.${environment}.env`,
+      envFilePath: `./config/.platform.${environment}.env`,
       isGlobal: true,
       cache: true,
-      load: [authDatabaseConfig],
+      load: [platformDatabaseConfig],
     }),
   ],
 })
-export class AuthServerConfigModule {}
+export class PlatformServerConfigModule {}

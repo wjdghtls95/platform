@@ -1,6 +1,6 @@
 import { QueryRunner } from 'typeorm';
 import { getDataSource } from '@libs/common/databases/typeorm/typeorm-ex.module';
-import { ContextProvider } from '@libs/common/providers/context.provider';
+import { ContextProvider } from '@libs/common/provider/context.provider';
 
 export class TypeOrmHelper {
   static async Transactional(
@@ -15,8 +15,9 @@ export class TypeOrmHelper {
       .filter((name: string) => !existQueryRunners[name])
       .map((it) => it as string);
 
-    const newQueryRunners =
-      await TypeOrmHelper.createQueryRunners(newDataSourceNames);
+    const newQueryRunners = await TypeOrmHelper.createQueryRunners(
+      newDataSourceNames,
+    );
 
     await TypeOrmHelper.startTransactions([
       ...Object.values(existQueryRunners).filter(

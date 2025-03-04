@@ -7,7 +7,7 @@ const environment = process.env.NODE_ENV;
 
 dotenv.config();
 dotenv.config({
-  path: `./config/.auth.${environment}.env`,
+  path: `./config/.platform.${environment}.env`,
 });
 
 const configService = new ConfigService();

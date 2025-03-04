@@ -7,7 +7,7 @@ const environment = process.env.NODE_ENV;
 
 dotenv.config();
 dotenv.config({
-  path: `./config/.auth.${environment}.env`,
+  path: `./config/.platform.${environment}.env`,
 });
 
 const configService = new ConfigService();
@@ -27,8 +27,8 @@ export default new DataSource({
   password: configService.get('AUTH_DB_PASSWORD'),
   database: configService.get('AUTH_DB_DATABASE'),
   synchronize: false,
-  entities: ['./apps/auth/src/**/*.entity.ts'],
+  entities: ['./apps/platform/src/**/*.entity.ts'],
   migrationsRun: false,
-  migrations: ['./libs/common/src/databases/typeorm/migrations/auth/*.ts'],
+  migrations: ['./libs/common/src/databases/typeorm/migrations/platform/*.ts'],
   migrationsTableName: 'migrations',
 });

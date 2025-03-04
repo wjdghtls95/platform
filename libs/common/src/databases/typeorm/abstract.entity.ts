@@ -4,18 +4,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Domain } from '@libs/common/domain/domain';
 
-export function BaseTimeEntity() {
-  return function (target: Function): void {
-    CreateDateColumn()(target.prototype, 'createdAt');
-    UpdateDateColumn()(target.prototype, 'updatedAt');
-  };
-}
-
-export abstract class AbstractEntity extends BaseEntity implements Domain {
+export abstract class BaseTimeEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: '아이디' })
-  id?: number;
+  id: number;
+
+  @CreateDateColumn({ comment: '생성 시간' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ comment: '업데이트 시간' })
+  updatedAt: Date;
 
   static create<T>(this: new () => T, partial?: Partial<T>): T {
     return Object.assign(new this(), partial);
