@@ -70,7 +70,7 @@ describe('Transaction Test', () => {
     expect(user.name).toBe(authInDto.name);
 
     // auth 테이블에서도 데이터가 정상적으로 저장되었는지 확인
-    const auth = await authRepository.findById(user.id);
+    const auth = await authRepository.findByUserId(user.id);
     expect(auth).toBeDefined();
     expect(auth.userId).toBe(user.id);
     expect(auth.authType).toBe(AUTH_TYPE.EMAIL);
@@ -110,6 +110,4 @@ describe('Transaction Test', () => {
 
     expect(checkDuplicatedUser.length).toBe(1);
   });
-
-  it();
 });

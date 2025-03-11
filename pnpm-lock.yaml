@@ -84,6 +84,9 @@ importers:
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       eslint:
         specifier: ^8.0.1
         version: 8.57.0
@@ -1323,10 +1326,6 @@ packages:
 
   dotenv-expand@12.0.1:
     resolution: {integrity: sha512-LaKRbou8gt0RNID/9RoI+J2rvXsBRPMV7p+ElHlPhcSARbCPDYcYG2s1TIzAfWv4YSgyY5taidWzzs31lNV3yQ==}
-    engines: {node: '>=12'}
-
-  dotenv@16.4.5:
-    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
 
   dotenv@16.4.7:
@@ -4631,8 +4630,6 @@ snapshots:
     dependencies:
       dotenv: 16.4.7
 
-  dotenv@16.4.5: {}
-
   dotenv@16.4.7: {}
 
   eastasianwidth@0.2.0: {}
@@ -6456,7 +6453,7 @@ snapshots:
       cli-highlight: 2.1.11
       dayjs: 1.11.11
       debug: 4.3.5
-      dotenv: 16.4.5
+      dotenv: 16.4.7
       glob: 10.4.1
       mkdirp: 2.1.6
       reflect-metadata: 0.2.2
