@@ -19,16 +19,18 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
     return queryRunner ? queryRunner.manager : this.manager;
   }
 
-  get queryBuilder(): SelectQueryBuilder<Entity> {
+  get getQueryBuilder(): SelectQueryBuilder<Entity> {
     return this.entityManager.createQueryBuilder(this.target, this.alias);
   }
 
   async findById(id: number): Promise<Entity> {
-    return this.queryBuilder.where(`${this.alias}.id=:id`, { id: id }).getOne();
+    return this.getQueryBuilder
+      .where(`${this.alias}.id=:id`, { id: id })
+      .getOne();
   }
 
   async findByIdIn(ids: number[]): Promise<Entity[]> {
-    return this.queryBuilder.whereInIds(ids).getMany();
+    return this.getQueryBuilder.whereInIds(ids).getMany();
   }
 
   async insert(
@@ -36,7 +38,7 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
       | QueryDeepPartialEntity<Entity>
       | QueryDeepPartialEntity<Entity>[],
   ): Promise<InsertResult> {
-    return this.queryBuilder.insert().values(entityOrEntities).execute();
+    return this.getQueryBuilder.insert().values(entityOrEntities).execute();
   }
 
   async upsert(
@@ -65,7 +67,7 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
     id: number,
     values: QueryDeepPartialEntity<Entity>,
   ): Promise<UpdateResult> {
-    return this.queryBuilder
+    return this.getQueryBuilder
       .update(this.alias)
       .set(values)
       .where(`${this.alias}.id = :id`, { id: id })
@@ -76,7 +78,7 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
     ids: number[],
     values: QueryDeepPartialEntity<Entity>,
   ): Promise<UpdateResult> {
-    return this.queryBuilder
+    return this.getQueryBuilder
       .update(this.alias)
       .set(values)
       .whereInIds(ids)
@@ -84,7 +86,7 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
   }
 
   async deleteById(id: number): Promise<DeleteResult> {
-    return this.queryBuilder
+    return this.getQueryBuilder
       .delete()
       .from(this.alias)
       .where(`${this.alias}.id = :id`, { id: id })
@@ -92,7 +94,7 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
   }
 
   async deleteByIdIn(ids: number[]): Promise<DeleteResult> {
-    return this.queryBuilder
+    return this.getQueryBuilder
       .delete()
       .from(this.alias)
       .whereInIds(ids)

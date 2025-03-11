@@ -35,7 +35,7 @@ export class PlatformServer {
       const document = SwaggerModule.createDocument(this.app, config);
 
       SwaggerModule.setup(
-        '/platform/api-docs',
+        '/api-docs',
         this.app,
         document,
         SWAGGER_CUSTOM_OPTIONS,

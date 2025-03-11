@@ -1,5 +1,5 @@
 import { PlatformServerConfigModule } from './config/platform-server-config.module';
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { DefaultModule } from './default/default.module';
 import { TypeOrmExModule } from '@libs/common/databases/typeorm/typeorm-ex.module';
@@ -10,6 +10,9 @@ import { AuthController } from './auth/auth.controller';
 import { UsersController } from './users/users.controller';
 import { AuthService } from './auth/auth.service';
 import { UsersService } from './users/users.service';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { AllExceptionFilter } from '@libs/common/filter/all-exception.filter';
+import { TransactionInterceptor } from '@libs/common/interceptor/transaction.interceptor';
 
 @Module({
   imports: [
@@ -33,6 +36,16 @@ import { UsersService } from './users/users.service';
     UsersModule,
   ],
   controllers: [AuthController, UsersController],
-  providers: [AuthService, UsersService],
+  providers: [
+    { provide: APP_PIPE, useValue: new ValidationPipe({ transform: true }) },
+    { provide: APP_FILTER, useClass: AllExceptionFilter },
+    { provide: APP_INTERCEPTOR, useClass: TransactionInterceptor },
+
+    /**
+     * service
+     */
+    AuthService,
+    UsersService,
+  ],
 })
 export class PlatformModule {}
