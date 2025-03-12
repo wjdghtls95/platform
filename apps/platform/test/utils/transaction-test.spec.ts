@@ -6,7 +6,7 @@ import { TypeOrmHelper } from '@libs/common/databases/typeorm/typeorm.helper';
 import { TestTransactionUtils } from './test-transaction.utils';
 import { TestDataSourceUtils } from './test-data-source.utils';
 import { UsersRepository } from '@libs/dao/users/users.repository';
-import { AuthDto } from '@libs/dao/auth/dto/auth.dto';
+import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 
@@ -54,7 +54,7 @@ describe('Transaction Test', () => {
   });
 
   it('트랜잭션 성공시 데이터가 정상적으로 저장', async () => {
-    const authInDto = new AuthDto();
+    const authInDto = new RegisterDto();
     authInDto.name = testUser;
     authInDto.email = 'test@test.test';
     authInDto.authType = AUTH_TYPE.EMAIL;
@@ -77,7 +77,7 @@ describe('Transaction Test', () => {
   });
 
   it('트랜잭션 실패 시 데이터 롤백 (중복 이메일 등록 시)', async () => {
-    const authInDto = new AuthDto();
+    const authInDto = new RegisterDto();
     authInDto.name = testUser;
     authInDto.email = 'test@test.test';
     authInDto.authType = AUTH_TYPE.EMAIL;
@@ -86,7 +86,7 @@ describe('Transaction Test', () => {
     // 회원가입 실행 (트랜잭션 적용)
     await authService.register(authInDto);
 
-    const authInDto2 = new AuthDto();
+    const authInDto2 = new RegisterDto();
     authInDto2.name = testUser + 1;
     authInDto2.email = 'test@test.test';
     authInDto2.authType = AUTH_TYPE.EMAIL;

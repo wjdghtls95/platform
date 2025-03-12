@@ -9,4 +9,10 @@ export class Users extends AbstractEntity {
   @Index({ unique: true })
   @Column({ comment: '유저 이메일' })
   email: string;
+
+  @Column({ comment: '유저 비밀번호' })
+  password: string;
+
+  @Column({ comment: 'jwt refresh token', nullable: true })
+  refreshToken?: string;
 }

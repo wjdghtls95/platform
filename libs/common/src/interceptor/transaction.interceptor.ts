@@ -20,7 +20,7 @@ export class TransactionInterceptor implements NestInterceptor {
       catchError(async (e) => {
         await TypeOrmHelper.rollbackTransactions();
 
-        await TypeOrmHelper.releases();
+        // await TypeOrmHelper.releases();
 
         throw e;
       }),
@@ -31,7 +31,7 @@ export class TransactionInterceptor implements NestInterceptor {
       mergeMap(async (res) => {
         await TypeOrmHelper.commitTransactions();
 
-        await TypeOrmHelper.releases();
+        // await TypeOrmHelper.releases();
 
         return res;
       }),

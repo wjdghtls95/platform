@@ -16,9 +16,6 @@ export class Auth extends AbstractEntity {
   })
   authType: AUTH_TYPE;
 
-  @Column({ comment: '비밀번호', nullable: true }) // 이메일 로그인 시 사용
-  password?: string;
-
   @Column({ comment: '소셜 로그인 id', nullable: true }) // 소셜 로그인 시 사용
   providerId?: string;
 }

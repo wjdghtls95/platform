@@ -3,6 +3,9 @@ import { ExcludeAbstractTimeDto } from '@libs/dao/base/exclude-abstract.time.dto
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
+/**
+ * 이메일 회원가입 dto
+ */
 export class EmailAuthOutDto extends ExcludeAbstractTimeDto {
   @ApiProperty({ description: '유저 이름' })
   @IsString()
@@ -21,6 +24,9 @@ export class EmailAuthOutDto extends ExcludeAbstractTimeDto {
   password?: string;
 }
 
+/**
+ * OAuth 회원가입 dto
+ */
 export class OAuthOutDto extends ExcludeAbstractTimeDto {
   @ApiProperty({ description: '유저 이름' })
   @IsString()
