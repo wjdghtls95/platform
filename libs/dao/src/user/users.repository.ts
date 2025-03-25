@@ -1,18 +1,26 @@
 import { EntityRepository } from '@libs/common/databases/typeorm/typeorm-ex.decorator';
-import { Users } from '@libs/dao/users/users.entity';
+import { User } from '@libs/dao/user/users.entity';
 import { AbstractRepository } from '@libs/common/databases/typeorm/abstract.repository';
 
-@EntityRepository(Users)
-export class UsersRepository extends AbstractRepository<Users> {
-  async findByEmail(email: string): Promise<Users> {
+@EntityRepository(User)
+export class UsersRepository extends AbstractRepository<User> {
+  /**
+   * 메일로 유저 조회
+   */
+  async findByEmail(email: string): Promise<User> {
     return this.getQueryBuilder
       .where(`${this.alias}.email=:email`, { email: email })
       .getOne();
   }
 
-  async findByEmailIn(emails: string[]): Promise<Users[]> {
+  /**
+   * 메일로 다중 유저 조회
+   */
+  async findByEmailIn(emails: string[]): Promise<User[]> {
     return this.getQueryBuilder
       .where(`${this.alias}.email IN (:...emails)`, { emails: emails })
       .getMany();
   }
 }
+
+export class usersRepository {}

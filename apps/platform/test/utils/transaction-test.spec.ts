@@ -5,7 +5,7 @@ import { testModule } from './test.module';
 import { TypeOrmHelper } from '@libs/common/databases/typeorm/typeorm.helper';
 import { TestTransactionUtils } from './test-transaction.utils';
 import { TestDataSourceUtils } from './test-data-source.utils';
-import { UsersRepository } from '@libs/dao/users/users.repository';
+import { UsersRepository } from '@libs/dao/user/users.repository';
 import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';

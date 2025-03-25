@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmExModule } from '@libs/common/databases/typeorm/typeorm-ex.module';
-import { UsersRepository } from '@libs/dao/users/users.repository';
+import { UsersRepository } from '@libs/dao/user/users.repository';
 
 @Module({
   imports: [

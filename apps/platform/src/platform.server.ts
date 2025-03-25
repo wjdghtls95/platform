@@ -1,6 +1,8 @@
 import { INestApplication, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SWAGGER_CUSTOM_OPTIONS } from '@libs/common/constants/swagger.constants.';
+import * as compression from 'compression';
+import * as cookieParser from 'cookie-parser';
 
 export class PlatformServer {
   constructor(private readonly app: INestApplication) {}
@@ -11,6 +13,16 @@ export class PlatformServer {
   init(): void {
     // swagger 초기화
     this._initializePlatformSwagger();
+
+    this.app.use(cookieParser());
+
+    // cors
+    this.app.enableCors({
+      origin: true, // 또는 특정 origin: 'http://localhost:3000'
+      credentials: true, // 쿠키 사용할 경우 필수
+    });
+
+    this.app.use(compression({ level: 6 }));
   }
 
   /**
@@ -30,6 +42,15 @@ export class PlatformServer {
         .setTitle('Golf Platform Project')
         .setDescription('The Golf Platform Project description')
         .setVersion('1.0')
+        .addBearerAuth(
+          {
+            type: 'http',
+            scheme: 'bearer',
+            name: 'access-token',
+            in: 'header',
+          },
+          'access-token',
+        )
         .build();
 
       const document = SwaggerModule.createDocument(this.app, config);

@@ -1,6 +1,6 @@
 import { AbstractEntity } from '@libs/common/databases/typeorm/abstract.entity';
 import { Column, Entity, Index } from 'typeorm';
-import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
+import { AUTH_TYPE, AuthType } from '@libs/common/constants/auth.constants';
 
 @Entity('auth')
 export class Auth extends AbstractEntity {
@@ -14,7 +14,7 @@ export class Auth extends AbstractEntity {
     enum: AUTH_TYPE,
     default: AUTH_TYPE.EMAIL,
   })
-  authType: AUTH_TYPE;
+  authType: AuthType;
 
   @Column({ comment: '소셜 로그인 id', nullable: true }) // 소셜 로그인 시 사용
   providerId?: string;

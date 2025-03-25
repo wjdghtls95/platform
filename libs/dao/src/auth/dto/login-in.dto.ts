@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
+import { AUTH_TYPE, AuthType } from '@libs/common/constants/auth.constants';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class LoginInDto {
@@ -13,7 +13,12 @@ export class LoginInDto {
   @IsNotEmpty()
   password: string;
 
-  @ApiProperty({ description: '회원가입 타입', default: AUTH_TYPE.EMAIL })
+  @ApiProperty({
+    description: '회원가입 타입',
+    enum: AUTH_TYPE,
+    default: AUTH_TYPE.EMAIL,
+  })
+  @IsString()
   @IsNotEmpty()
-  authType: number;
+  authType: AuthType;
 }

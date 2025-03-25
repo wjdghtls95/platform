@@ -1,9 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { AUTH_TYPE, AuthType } from '@libs/common/constants/auth.constants';
-import { IsNotEmpty, IsString } from 'class-validator';
 import { ExcludeAbstractTimeDto } from '@libs/dao/base/exclude-abstract.time.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { AUTH_TYPE, AuthType } from '@libs/common/constants/auth.constants';
 
-export class RegisterDto extends ExcludeAbstractTimeDto {
+/**
+ * 이메일 회원가입 dto
+ */
+export class DefaultRegisterDto extends ExcludeAbstractTimeDto {
   @ApiProperty({ description: '유저 이름' })
   @IsString()
   @IsNotEmpty()
@@ -21,9 +24,6 @@ export class RegisterDto extends ExcludeAbstractTimeDto {
   })
   authType: AuthType;
 
-  @ApiProperty({ description: '비밀번호', nullable: true, default: '' })
+  @ApiProperty({ description: '비밀번호', default: null })
   password?: string;
-
-  @ApiProperty({ description: 'OAuth Id', nullable: true, default: null })
-  providerId?: string;
 }

@@ -1,12 +1,12 @@
-import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
-import { ExcludeAbstractTimeDto } from '@libs/dao/base/exclude-abstract.time.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseOutDto } from '@libs/common/dto/base-out.dto';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { AUTH_TYPE, AuthType } from '@libs/common/constants/auth.constants';
 
-/**
- * 이메일 회원가입 dto
- */
-export class EmailAuthOutDto extends ExcludeAbstractTimeDto {
+export class RegisterOutDto extends BaseOutDto {
+  @ApiProperty({ description: '유저 아이디' })
+  userId: number;
+
   @ApiProperty({ description: '유저 이름' })
   @IsString()
   @IsNotEmpty()
@@ -17,30 +17,22 @@ export class EmailAuthOutDto extends ExcludeAbstractTimeDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({ description: '가입 타입 체크', default: AUTH_TYPE.EMAIL })
-  authType: number;
+  @ApiProperty({
+    description: '가입 타입 체크',
+    enum: AUTH_TYPE,
+    default: AUTH_TYPE.EMAIL,
+  })
+  authType: AuthType;
 
-  @ApiProperty({ description: '비밀번호', default: null })
+  @ApiProperty({ description: '비밀번호', nullable: true, default: '' })
   password?: string;
-}
 
-/**
- * OAuth 회원가입 dto
- */
-export class OAuthOutDto extends ExcludeAbstractTimeDto {
-  @ApiProperty({ description: '유저 이름' })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+  @ApiProperty({ description: 'OAuth Id', nullable: true, default: null })
+  providerId?: string;
 
-  @ApiProperty({ description: '유저 이메일' })
-  @IsString()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({ description: '가입 타입 체크', default: AUTH_TYPE.EMAIL })
-  authType: number;
-
-  @ApiProperty({ description: '비밀번호', default: null })
-  password?: string;
+  // @ApiProperty({
+  //   type: DefaultRegisterDto,
+  //   description: '이메일 회원가입',
+  // })
+  // defaultRegisterDto: DefaultRegisterDto;
 }
