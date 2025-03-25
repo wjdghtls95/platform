@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { ApiResponseEntity } from '@libs/common/decorators/api-response-entity.decorator';
@@ -11,10 +20,11 @@ import { OAuthTokenDto } from '@libs/dao/auth/dto/oauth-token.dto';
 import { RefreshAccessTokenInDto } from '@libs/dao/auth/dto/refresh-access-token-in.dto';
 import { OAuthVerifyOutDto } from '@libs/dao/auth/dto/oauth-verify-out.dto';
 import { LoginOutDto } from '@libs/dao/auth/dto/login-out.dto';
+import { Auth } from '@libs/common/decorators/auth.decorator';
+import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
 
 @Controller('auth')
 @ApiTags('Auth')
-// @Auth()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -63,5 +73,16 @@ export class AuthController {
     );
 
     return ResponseEntity.ok().body(oauthVerifyOutDto);
+  }
+
+  @Delete('/logout')
+  @Auth()
+  @ApiResponseEntity({ summary: '로그아웃' })
+  async logout(@Req() req: Request): Promise<ResponseEntity<unknown>> {
+    const user = (req as any).user as AuthPayload;
+
+    await this.authService.logout(user.userId);
+
+    return ResponseEntity.ok().build(); // 응답 body 없이 200 반환
   }
 }

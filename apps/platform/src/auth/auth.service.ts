@@ -22,7 +22,6 @@ import { OAuthVerifyOutDto } from '@libs/dao/auth/dto/oauth-verify-out.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(AuthRepository) private readonly authRepository: AuthRepository,
     @Inject(UsersRepository) private readonly usersRepository: UsersRepository,
     private readonly oauthGoogleService: OAuthGoogleService,
   ) {}
@@ -173,6 +172,13 @@ export class AuthService {
       accessToken: TokenUtil.generateAccessToken(user.id),
       refreshToken: user.refreshToken,
     });
+  }
+
+  /**
+   * 로그아웃
+   */
+  async logout(userId: number): Promise<void> {
+    await this.usersRepository.updateById(userId, { refreshToken: null });
   }
 
   /**
