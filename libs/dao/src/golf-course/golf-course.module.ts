@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmExModule } from '@libs/common/databases/typeorm/typeorm-ex.module';
-import { UsersRepository } from '@libs/dao/user/users.repository';
 import { DATABASE_NAME } from '@libs/common/constants/database.constants';
+import { golfCourseRepository } from '@libs/dao/golf-course/golf-course.repository';
 
 @Module({
   imports: [
-    TypeOrmExModule.forFeatures([UsersRepository], [DATABASE_NAME.USER]),
+    TypeOrmExModule.forFeatures(
+      [golfCourseRepository],
+      [DATABASE_NAME.GOLF_COURSE],
+    ),
   ],
   exports: [TypeOrmExModule],
 })
-export class UsersModule {}
+export class GolfCourseModule {}

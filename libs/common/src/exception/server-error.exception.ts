@@ -3,7 +3,6 @@ import {
   InternalErrorCode,
   INTERNAL_ERROR_CODE,
 } from '@libs/common/constants/internal-error-code.constants';
-import { INTERNAL_ERROR_CODE_DESC } from '@libs/common/constants/internal-error-code-desc.constants';
 
 export class ServerErrorException extends InternalServerErrorException {
   public readonly ignoreExceptionLog: boolean;
@@ -15,7 +14,7 @@ export class ServerErrorException extends InternalServerErrorException {
   ) {
     super(
       errorCode,
-      errorMessage || ServerErrorException.getErrorDescription(errorCode),
+      errorMessage || ServerErrorException.errorCodeToString(errorCode),
     );
     this.ignoreExceptionLog = ignoreExceptionLog;
   }
@@ -23,14 +22,10 @@ export class ServerErrorException extends InternalServerErrorException {
   /**
    * get error description
    */
-  static getErrorDescription(errorCode: InternalErrorCode): string {
-    let codeName = Object.keys(INTERNAL_ERROR_CODE).find(
+  static errorCodeToString(errorCode: InternalErrorCode): string {
+    const codeName = Object.keys(INTERNAL_ERROR_CODE).find(
       (key) => INTERNAL_ERROR_CODE[key] === errorCode,
     );
-
-    if (process.env.NODE_ENV !== 'prod') {
-      codeName += ` (${INTERNAL_ERROR_CODE_DESC[errorCode]})`;
-    }
 
     return codeName || 'ERROR_CODE_UNKNOWN';
   }

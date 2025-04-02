@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AuthRepository } from '@libs/dao/auth/auth.repository';
 import { UsersRepository } from '@libs/dao/user/users.repository';
 import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
-import { ServerErrorException } from '@libs/common/exception/server-errror.exception';
+import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
 import { User } from '@libs/dao/user/users.entity';

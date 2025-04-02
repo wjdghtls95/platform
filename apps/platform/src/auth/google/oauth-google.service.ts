@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { OAuth2Client } from 'google-auth-library';
 import { OAuthGoogleInfo } from './interface/oauth-google-info.interface';
 import googleConfig from './config/google.config';
-import { ServerErrorException } from '@libs/common/exception/server-errror.exception';
+import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 import { GetPlatformTokenOutDto } from '@libs/dao/auth/dto/get-platform-token-out.dto';
 

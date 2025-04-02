@@ -9,9 +9,7 @@ import { TYPEORM_ENTITY_REPOSITORY } from '@libs/common/databases/typeorm/typeor
 import { DataSource } from 'typeorm';
 
 const customDataSources: Record<string, DataSource> = {};
-export function getDataSource(dataSourceName: string): DataSource | null {
-  return customDataSources[dataSourceName] || null;
-}
+const customRepositories: Record<string, Record<string, any>> = {};
 
 export class TypeOrmExModule {
   public static forRoot(options?: TypeOrmModuleOptions): DynamicModule {
@@ -54,11 +52,18 @@ export class TypeOrmExModule {
 
             const baseRepo = dataSource.getRepository(entity);
 
-            result[database] = new repository(
+            const customRepository = new repository(
               baseRepo.target,
               baseRepo.manager,
               baseRepo.queryRunner,
             );
+
+            if (!customRepositories[database]) {
+              customRepositories[database] = {};
+            }
+            customRepositories[database][repository.name] = customRepository;
+
+            result[database] = customRepository;
           }
 
           const values = Object.values(result);
@@ -75,4 +80,8 @@ export class TypeOrmExModule {
       module: TypeOrmExModule,
     };
   }
+}
+
+export function getDataSource(dataSourceName: string): DataSource | null {
+  return customDataSources[dataSourceName] || null;
 }

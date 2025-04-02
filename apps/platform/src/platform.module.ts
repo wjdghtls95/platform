@@ -10,13 +10,16 @@ import { AuthController } from './auth/auth.controller';
 import { UsersController } from './users/users.controller';
 import { AuthService } from './auth/auth.service';
 import { UsersService } from './users/users.service';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AllExceptionFilter } from '@libs/common/filter/all-exception.filter';
 import { TransactionInterceptor } from '@libs/common/interceptor/transaction.interceptor';
 import { SecurityModule } from '@libs/common/security/security.module';
-import { JwtGuard } from '@libs/common/security/guard/jwt.guard';
 import { OAuthGoogleService } from './auth/google/oauth-google.service';
 import { OAuth2Client } from 'google-auth-library';
+import { GolfCourseModule } from '@libs/dao/golf-course/golf-course.module';
+import { GolfCourseController } from './golf-course/golf-course.controller';
+import { GolfCourseService } from './golf-course/golf-course.service';
+import { KakaoModule } from '@libs/common/external/kakao/kakao.module';
 
 @Module({
   imports: [
@@ -39,24 +42,29 @@ import { OAuth2Client } from 'google-auth-library';
     // security
     SecurityModule,
 
+    // external
+    KakaoModule,
+
     // domain
     AuthModule,
     UsersModule,
+    GolfCourseModule,
   ],
-  controllers: [AuthController, UsersController],
+  controllers: [AuthController, UsersController, GolfCourseController],
   providers: [
     { provide: APP_PIPE, useValue: new ValidationPipe({ transform: true }) },
     { provide: APP_FILTER, useClass: AllExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: TransactionInterceptor },
-    { provide: APP_GUARD, useClass: JwtGuard },
-
-    // service
-    AuthService,
-    UsersService,
+    // { provide: APP_GUARD, useClass: JwtGuard },
 
     // oauth
     OAuthGoogleService,
     OAuth2Client,
+
+    // service
+    AuthService,
+    UsersService,
+    GolfCourseService,
   ],
 })
 export class PlatformModule {}

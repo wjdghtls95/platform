@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
-import { ServerErrorException } from '@libs/common/exception/server-errror.exception';
+import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -34,7 +34,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         : undefined;
 
     const message = error
-      ? ServerErrorException.getErrorDescription(error)
+      ? ServerErrorException.errorCodeToString(error)
       : undefined;
 
     const ignoreExceptionLog =
@@ -48,9 +48,6 @@ export class AllExceptionFilter implements ExceptionFilter {
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
       error: error,
       message: message,
-      detail: {
-        method: ctx.getRequest().method,
-      },
     };
 
     if (
@@ -81,7 +78,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const errorMessage = {
       request: request,
-      ERROR_CODE: ServerErrorException.getErrorDescription(exception.response),
+      ERROR_CODE: ServerErrorException.errorCodeToString(exception.response),
       ...exception,
     };
 

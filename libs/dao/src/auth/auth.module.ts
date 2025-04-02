@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthRepository } from '@libs/dao/auth/auth.repository';
 import { TypeOrmExModule } from '@libs/common/databases/typeorm/typeorm-ex.module';
+import { DATABASE_NAME } from '@libs/common/constants/database.constants';
 
 @Module({
   imports: [
-    TypeOrmExModule.forFeatures(
-      [AuthRepository],
-      [process.env.PLATFORM_DB_NAME],
-    ),
+    TypeOrmExModule.forFeatures([AuthRepository], [DATABASE_NAME.AUTH]),
   ],
   exports: [TypeOrmExModule],
 })
