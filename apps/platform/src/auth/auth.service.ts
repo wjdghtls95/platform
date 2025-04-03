@@ -17,11 +17,14 @@ import { OAuthGoogleService } from './google/oauth-google.service';
 import { AccessToken, TokenUtil } from '@libs/common/utils/token.util';
 import { RefreshAccessTokenInDto } from '@libs/dao/auth/dto/refresh-access-token-in.dto';
 import { OAuthVerifyOutDto } from '@libs/dao/auth/dto/oauth-verify-out.dto';
+import { AuthRepository } from '@libs/dao/auth/auth.repository';
+import { Auth } from '@libs/dao/auth/auth.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(UsersRepository) private readonly usersRepository: UsersRepository,
+    @Inject(AuthRepository) private readonly authRepository: AuthRepository,
     private readonly oauthGoogleService: OAuthGoogleService,
   ) {}
 
@@ -30,16 +33,37 @@ export class AuthService {
    */
   @Transactional()
   async register(registerDto: RegisterDto): Promise<RegisterOutDto> {
-    const user = await this._checkAndCreateUser(registerDto);
+    await this._checkExistedUser(registerDto);
+
+    // 유저 생성
+    const user = User.create({
+      name: registerDto.name,
+      nickname:
+        registerDto.nickname === ''
+          ? this._generateNickname()
+          : registerDto.nickname,
+    });
+
+    await this.usersRepository.insert(user);
+
+    // auth 생성
+    const auth = Auth.create({
+      userId: user.id,
+      email: registerDto.email,
+      password: await EncryptUtil.tokenEncode(registerDto.password),
+      authType: registerDto.authType,
+    });
+
+    await this.authRepository.insert(auth);
 
     return RegisterOutDto.of({
       userId: user.id,
-      name: registerDto.name,
-      email: registerDto.email,
-      authType: user.authType,
-      password: user.password,
+      name: user.name,
+      nickname: user.nickname,
+      email: auth.email,
+      authType: auth.authType,
+      password: auth.password,
     });
-
     /**
      * TODO.. 리펙토링 될 만한것
      * const registerStrategies: Record<AUTH_TYPE, (dto: RegisterDto) => Promise<RegisterDto>> = {
@@ -57,21 +81,20 @@ export class AuthService {
   async login(loginInDto: LoginInDto): Promise<LoginOutDto> {
     const { email, password } = loginInDto;
 
-    const user = await this._checkUser(email, password);
+    const { user, auth } = await this._checkLoginInfo(email, password);
 
     // accessToken, refreshToken 생성
-    const { accessToken, refreshToken } =
-      await this._generateAccessTokenAndRefreshToken({
-        userId: user.id,
-        email: user.email,
-      });
+    const { accessToken, refreshToken } = await this._generateToken({
+      userId: user.id,
+      email: auth.email,
+    });
 
     // refresh token DB 저장
-    await this.usersRepository.updateById(user.id, {
+    await this.authRepository.updateById(user.id, {
       refreshToken: refreshToken,
     });
 
-    return LoginOutDto.fromEntity(user).setToken(accessToken);
+    return LoginOutDto.fromEntity(auth).setToken(accessToken);
   }
 
   /**
@@ -87,39 +110,48 @@ export class AuthService {
       getPlatformTokenOutDto.platformToken,
     );
 
-    let user = await this.usersRepository.findByEmail(oAuthGoogleInfo.email);
+    let auth = await this.authRepository.findByEmail(oAuthGoogleInfo.email);
 
-    if (!user) {
-      user = this.usersRepository.create({
-        name: oAuthGoogleInfo.name ?? null,
+    let user: User;
+
+    if (!auth) {
+      user = User.create({
+        nickname: this._generateNickname(),
+      });
+
+      await this.usersRepository.insert(user);
+
+      auth = Auth.create({
+        userId: user.id,
         email: oAuthGoogleInfo.email,
         authType: AUTH_TYPE.GOOGLE,
         providerId: oAuthGoogleInfo.providerId,
       });
 
-      await this.usersRepository.insert(user);
+      await this.authRepository.insert(auth);
+    } else {
+      user = await this.usersRepository.findById(auth.userId);
     }
 
-    const { accessToken, refreshToken } =
-      await this._generateAccessTokenAndRefreshToken({
-        userId: user.id,
-        email: user.email,
-      });
+    const { accessToken, refreshToken } = await this._generateToken({
+      userId: user.id,
+      email: auth.email,
+    });
 
-    await this.usersRepository.updateById(user.id, {
+    await this.authRepository.updateById(user.id, {
       refreshToken: refreshToken,
     });
 
     return OAuthTokenDto.of({
       userId: user.id,
-      email: user.email,
+      email: auth.email,
       name: user.name ?? null,
       accessToken: accessToken,
     });
   }
 
   /**
-   * refresh token 재발급
+   * refresh token 재발급 (TTL 기준)
    */
   async refreshAccessToken(
     refreshAccessTokenInDto: RefreshAccessTokenInDto,
@@ -128,15 +160,15 @@ export class AuthService {
 
     const { userId } = this._decodeAccessToken(accessToken);
 
-    const user = await this.usersRepository.findById(userId);
+    const auth = await this.authRepository.findByUserId(userId);
 
     // 유저 존재 확인
-    if (!user) {
+    if (!auth) {
       throw new ServerErrorException(INTERNAL_ERROR_CODE.USER_NOT_FOUND);
     }
 
     // 유저 refresh token 유효한지 확인
-    if (user.refreshToken !== refreshToken) {
+    if (auth.refreshToken !== refreshToken) {
       throw new ServerErrorException(
         INTERNAL_ERROR_CODE.LOGIN_REFRESH_TOKEN_INVALIDATE,
       );
@@ -163,13 +195,14 @@ export class AuthService {
 
     // ttl 만료 안됬을때 refresh token 갱신 업데이트
     if (ttl - REFRESH_TOKEN_UPDATE_TTL < now) {
-      user.refreshToken = TokenUtil.generateRefreshToken();
-      await this.usersRepository.updateById(user.id, user);
+      auth.refreshToken = TokenUtil.generateRefreshToken();
+
+      await this.authRepository.updateById(userId, auth);
     }
 
     return OAuthVerifyOutDto.of({
-      accessToken: TokenUtil.generateAccessToken(user.id),
-      refreshToken: user.refreshToken,
+      accessToken: TokenUtil.generateAccessToken(userId),
+      refreshToken: auth.refreshToken,
     });
   }
 
@@ -177,14 +210,14 @@ export class AuthService {
    * 로그아웃
    */
   async logout(userId: number): Promise<void> {
-    await this.usersRepository.updateById(userId, { refreshToken: null });
+    await this.authRepository.updateById(userId, { refreshToken: null });
   }
 
   /**
-   * 유저 체크 & 생성
+   * 유저 존재 체크
    */
-  private async _checkAndCreateUser(registerDto: RegisterDto): Promise<User> {
-    // password 존재 유무 체크
+  private async _checkExistedUser(registerDto: RegisterDto): Promise<void> {
+    // Dto password 존재 유무 체크
     if (!registerDto.password) {
       throw new ServerErrorException(
         INTERNAL_ERROR_CODE.AUTH_PASSWORD_NOT_FOUND,
@@ -192,43 +225,29 @@ export class AuthService {
     }
 
     // 유저 존재 체크
-    const checkUser = await this.usersRepository.findByEmail(registerDto.email);
+    const checkEmail = await this.authRepository.findByEmail(registerDto.email);
 
-    if (checkUser) {
+    if (checkEmail) {
       throw new ServerErrorException(INTERNAL_ERROR_CODE.USER_ALREADY_CREATED);
     }
-
-    // 유저 생성 & insert
-    const user = User.create({
-      name: registerDto.name,
-      email: registerDto.email,
-      password: await EncryptUtil.tokenEncode(registerDto.password),
-      authType: registerDto.authType,
-    });
-
-    await this.usersRepository.insert(user);
-
-    return user;
   }
 
   /**
    * 유저 로그인 정보 체크
    */
-  private async _checkUser(email: string, password: string): Promise<User> {
-    const user = await this.usersRepository.findByEmail(email);
+  private async _checkLoginInfo(
+    email: string,
+    password: string,
+  ): Promise<{ user: User; auth: Auth }> {
+    const auth = await this.authRepository.findByEmail(email);
 
     // 유저가 존재하지 않을때
-    if (!user) {
+    if (!auth) {
       throw new ServerErrorException(INTERNAL_ERROR_CODE.USER_NOT_FOUND);
     }
 
-    // 이메일이 유효하지 않을때
-    if (user.email !== email) {
-      throw new ServerErrorException(INTERNAL_ERROR_CODE.USER_EMAIL_INVALID);
-    }
-
-    if (user.authType === AUTH_TYPE.EMAIL) {
-      const verifyPassword = await EncryptUtil.verify(password, user.password);
+    if (auth.authType === AUTH_TYPE.EMAIL) {
+      const verifyPassword = await EncryptUtil.verify(password, auth.password);
 
       // 비밀번호가 유효하지 않을때
       if (!verifyPassword) {
@@ -238,13 +257,26 @@ export class AuthService {
       }
     }
 
-    return user;
+    const user = await this.usersRepository.findById(auth.userId);
+
+    return { user: user, auth: auth };
+  }
+
+  /**
+   * 닉네임 랜덤 자동 생성
+   */
+  private _generateNickname(): string {
+    const uuid = crypto.randomUUID().slice(0, 5);
+
+    const nickname = `Member_${uuid}`;
+
+    return nickname;
   }
 
   /**
    * AccessToken & reFreshToken 생성
    */
-  private async _generateAccessTokenAndRefreshToken(
+  private async _generateToken(
     authPayload: AuthPayload,
   ): Promise<Record<string, string>> {
     return {

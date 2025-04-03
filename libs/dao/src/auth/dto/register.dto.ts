@@ -9,10 +9,8 @@ export class RegisterDto extends ExcludeAbstractTimeDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: '유저 이메일' })
-  @IsString()
-  @IsNotEmpty()
-  email: string;
+  @ApiProperty({ description: '유저 닉네임', nullable: true, default: '' })
+  nickname?: string;
 
   @ApiProperty({
     description: '가입 타입 체크',
@@ -20,6 +18,11 @@ export class RegisterDto extends ExcludeAbstractTimeDto {
     default: AUTH_TYPE.EMAIL,
   })
   authType: AuthType;
+
+  @ApiProperty({ description: '유저 이메일' })
+  @IsString()
+  @IsNotEmpty()
+  email: string;
 
   @ApiProperty({ description: '비밀번호', nullable: true, default: '' })
   password?: string;

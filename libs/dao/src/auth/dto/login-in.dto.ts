@@ -12,13 +12,4 @@ export class LoginInDto {
   @IsString()
   @IsNotEmpty()
   password: string;
-
-  @ApiProperty({
-    description: '회원가입 타입',
-    enum: AUTH_TYPE,
-    default: AUTH_TYPE.EMAIL,
-  })
-  @IsString()
-  @IsNotEmpty()
-  authType: AuthType;
 }

@@ -9,12 +9,14 @@ import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 import { UsersRepository } from '@libs/dao/user/users.repository';
 import { LoginInDto } from '@libs/dao/auth/dto/login-in.dto';
+import { AuthRepository } from '@libs/dao/auth/auth.repository';
 
 describe('AuthService', () => {
   let module: TestingModule;
 
   let authService: AuthService;
 
+  let authRepository: AuthRepository;
   let usersRepository: UsersRepository;
 
   let email: string;
@@ -25,6 +27,7 @@ describe('AuthService', () => {
     authService = module.get<AuthService>(AuthService);
 
     usersRepository = module.get<UsersRepository>(UsersRepository);
+    authRepository = module.get<AuthRepository>(AuthRepository);
 
     email = 'authTester';
   });
@@ -38,8 +41,13 @@ describe('AuthService', () => {
   });
 
   afterAll(async () => {
-    await TestDataSourceUtils.clearDataSource(module);
-    await module.close();
+    // await TestDataSourceUtils.clearDataSource(module);
+    // await module.close();
+
+    await Promise.all([
+      TestDataSourceUtils.clearDataSource(module),
+      module.close(),
+    ]);
   });
 
   it('Auth Service define', async () => {
@@ -68,11 +76,12 @@ describe('AuthService', () => {
 
     await authService.register(registerDto);
 
-    const user = await usersRepository.findByEmail(registerDto.email);
+    const auth = await authRepository.findByEmail(registerDto.email);
+    const user = await usersRepository.findById(auth.userId);
 
-    expect(user).toBeDefined();
+    expect(auth).toBeDefined();
+    expect(auth.email).toEqual(registerDto.email);
     expect(user.name).toEqual(registerDto.name);
-    expect(user.email).toEqual(registerDto.email);
 
     // 중복 유저 회원가입
     const registerDto2 = new RegisterDto();
@@ -96,7 +105,6 @@ describe('AuthService', () => {
     const loginInDto = new LoginInDto();
     loginInDto.email = '';
     loginInDto.password = '1234';
-    loginInDto.authType = AUTH_TYPE.EMAIL;
 
     try {
       await authService.login(loginInDto);
@@ -114,11 +122,12 @@ describe('AuthService', () => {
 
     await authService.register(registerDto);
 
-    const user = await usersRepository.findByEmail(registerDto.email);
+    const auth = await authRepository.findByEmail(registerDto.email);
+    const user = await usersRepository.findById(auth.userId);
 
     expect(user).toBeDefined();
     expect(user.name).toEqual(registerDto.name);
-    expect(user.email).toEqual(registerDto.email);
+    expect(auth.email).toEqual(registerDto.email);
 
     loginInDto.email = 'wrongEmail';
 
@@ -126,9 +135,7 @@ describe('AuthService', () => {
       await authService.login(loginInDto);
       fail('USER_EMAIL_INVALID not thrown');
     } catch (e) {
-      expect(e.response.message).toEqual(
-        INTERNAL_ERROR_CODE.USER_EMAIL_INVALID,
-      );
+      expect(e.response.message).toEqual(INTERNAL_ERROR_CODE.USER_NOT_FOUND);
     }
   });
 });

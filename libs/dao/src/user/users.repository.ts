@@ -12,15 +12,4 @@ export class UsersRepository extends AbstractRepository<User> {
       .where(`${this.alias}.email=:email`, { email: email })
       .getOne();
   }
-
-  /**
-   * 메일로 다중 유저 조회
-   */
-  async findByEmailIn(emails: string[]): Promise<User[]> {
-    return this.getQueryBuilder
-      .where(`${this.alias}.email IN (:...emails)`, { emails: emails })
-      .getMany();
-  }
 }
-
-export class usersRepository {}

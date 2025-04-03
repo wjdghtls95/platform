@@ -12,6 +12,10 @@ export class RegisterOutDto extends BaseOutDto {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({ description: '유저 닉네임' })
+  @IsString()
+  nickname: string;
+
   @ApiProperty({ description: '유저 이메일' })
   @IsString()
   @IsNotEmpty()

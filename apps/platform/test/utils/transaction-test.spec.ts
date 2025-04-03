@@ -64,16 +64,14 @@ describe('Transaction Test', () => {
     await authService.register(authInDto);
 
     // 트랜잭션 커밋 후 데이터가 DB에 존재하는지 확인
-    const user = await usersRepository.findByEmail(authInDto.email);
-    expect(user).toBeDefined();
-    expect(user.email).toBe(authInDto.email);
-    expect(user.name).toBe(authInDto.name);
+    const auth = await authRepository.findByEmail(authInDto.email);
+    const user = await usersRepository.findById(auth.userId);
 
-    // auth 테이블에서도 데이터가 정상적으로 저장되었는지 확인
-    // const auth = await authRepository.findByUserId(user.id);
-    // expect(auth).toBeDefined();
-    // expect(auth.userId).toBe(user.id);
-    // expect(auth.authType).toBe(AUTH_TYPE.EMAIL);
+    expect(auth).toBeDefined();
+    expect(auth.userId).toBe(user.id);
+    expect(auth.email).toBe(authInDto.email);
+    expect(auth.authType).toBe(AUTH_TYPE.EMAIL);
+    expect(user.name).toBe(authInDto.name);
   });
 
   it('트랜잭션 실패 시 데이터 롤백 (중복 이메일 등록 시)', async () => {
@@ -106,7 +104,7 @@ describe('Transaction Test', () => {
     emails.push(authInDto2.email);
 
     // 중복된 유저 등록시 트랜잭션 롤백
-    const checkDuplicatedUser = await usersRepository.findByEmailIn(emails);
+    const checkDuplicatedUser = await authRepository.findByEmailIn(emails);
 
     expect(checkDuplicatedUser.length).toBe(1);
   });
