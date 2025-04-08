@@ -30,7 +30,16 @@ export abstract class AbstractRedisRepository {
     await this.redis.rename(key, newKey);
   }
 
-  async zAdd(key: string, scoreMember: number[]): Promise<void> {
-    await this.redis.zadd(key, ...scoreMember);
+  async allKeys(): Promise<string[]> {
+    return this.redis.keys('*');
+  }
+
+  async getJson<T>(key: string): Promise<T | null> {
+    const raw = await this.redis.get(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  }
+
+  async setJson<T>(key: string, value: T, ttlSeconds = 3600): Promise<void> {
+    await this.redis.set(key, JSON.stringify(value), 'EX', ttlSeconds);
   }
 }

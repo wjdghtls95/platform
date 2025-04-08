@@ -19,6 +19,17 @@ export const INTERNAL_ERROR_CODE = {
   LOGIN_REFRESH_TOKEN_INVALIDATE: 32, // refresh token 이 유효하지 않음
   LOGIN_REFRESH_TOKEN_EXPIRED: 33, // refresh token 만료
 
+  // API SECURITY : 41 ~ 50
+  API_SECURITY_AUTH_TOKEN_INVALIDATE: 41, // authToken 유효하지 않음
+
+  // GOLF COURSE : 51 ~ 70
+  GOLF_COURSE_NOT_FOUND: 51, // 리스트에 등록되지 않은 골프장
+  GOLF_COURSE_ALREADY_CREATED: 52, // 리스트에 이미 등록된 골프장
+
+  // EXTERNAL : 101 ~ 120
+  EXTERNAL_SERVICE_ERROR: 101, // 외부 API 호출 자체 실패
+  EXTERNAL_LOCATION_LOOKUP_FAILED: 102, // 외부 API를 통한 위치 조회 실패
+
   // DATABASE
   DB_UPDATE_FAILED: 9999, // db 업데이트 실패
 } as const;

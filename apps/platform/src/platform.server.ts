@@ -18,7 +18,7 @@ export class PlatformServer {
 
     // cors
     this.app.enableCors({
-      origin: true, // 또는 특정 origin: 'http://localhost:3000'
+      origin: '*', // 또는 특정 origin: 'http://localhost:3000'
       credentials: true, // 쿠키 사용할 경우 필수
     });
 
@@ -44,15 +44,14 @@ export class PlatformServer {
         .setVersion('1.0')
         .addBearerAuth(
           {
-            type: 'http',
-            scheme: 'bearer',
-            name: 'access-token',
+            type: 'apiKey',
+            name: 'authToken', // Swagger UI가 이 이름으로 인식함
             in: 'header',
+            description: 'Enter the access-token you received.',
           },
-          'access-token',
+          'authToken',
         )
         .build();
-
       const document = SwaggerModule.createDocument(this.app, config);
 
       SwaggerModule.setup(

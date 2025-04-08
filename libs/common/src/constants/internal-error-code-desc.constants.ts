@@ -21,6 +21,17 @@ export const INTERNAL_ERROR_CODE_DESC = {
   [e.LOGIN_REFRESH_TOKEN_INVALIDATE]: 'refresh token 이 유효하지 않음',
   [e.LOGIN_REFRESH_TOKEN_EXPIRED]: 'refresh token 만료',
 
+  // API_SECURITY
+  [e.API_SECURITY_AUTH_TOKEN_INVALIDATE]: 'authToken 유효 하지 않음',
+
+  // GOLF COURSE
+  [e.GOLF_COURSE_NOT_FOUND]: '리스트에 등록되지 않은 골프장',
+  [e.GOLF_COURSE_ALREADY_CREATED]: '리스트에 이미 등록된 골프장',
+
+  // EXTERNAL
+  [e.EXTERNAL_SERVICE_ERROR]: '외부 API 호출 실패',
+  [e.EXTERNAL_LOCATION_LOOKUP_FAILED]: '외부 API를 통한 위치 조회 실패',
+
   // DATABASE
   [e.DB_UPDATE_FAILED]: 'db 얻데이트 실패',
 } as const;

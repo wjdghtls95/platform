@@ -7,20 +7,23 @@ import {
 } from '@libs/common/constants/kakao.constants';
 
 export class SearchNearByInDto extends ExcludeAbstractTimeDto {
-  @ApiProperty({ description: '위도' })
-  @IsNumber()
-  lat: number;
-
-  @ApiProperty({ description: '경도' })
+  @ApiProperty({ description: 'kakao docs x (경도 longitude)' })
   @IsNumber()
   lng: number;
 
-  @ApiProperty({ description: '반경' })
+  @ApiProperty({ description: 'kakao docs y (위도 latitude)' })
+  @IsNumber()
+  lat: number;
+
+  @ApiProperty({ description: '반경 (m)', default: 2000 })
   @IsNumber()
   radius: number;
 
-  @ApiProperty({ description: '카테고리', enum: KAKAO_CATEGORY_CODE })
-  @IsEnum(KAKAO_CATEGORY_CODE)
+  @ApiProperty({
+    description: 'kakao 카테고리',
+    enum: Object.keys(KAKAO_CATEGORY_CODE),
+  })
+  @IsEnum(Object.keys(KAKAO_CATEGORY_CODE))
   kakaoCategoryCode: KakaoCategoryCode;
 
   @ApiProperty({ description: '페이지 번호', required: false, default: 1 })

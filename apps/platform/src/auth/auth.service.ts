@@ -177,7 +177,7 @@ export class AuthService {
     // refresh token 의 ttl 조회
     const ttl = this._decodeRefreshToken(refreshToken);
 
-    // ttl 존재 확인
+    // ttl 유무 확인
     if (!ttl) {
       throw new ServerErrorException(
         INTERNAL_ERROR_CODE.LOGIN_REFRESH_TOKEN_INVALIDATE,

@@ -1,17 +1,26 @@
 import { Column, Entity } from 'typeorm';
 import { AbstractEntity } from '@libs/common/databases/typeorm/abstract.entity';
 
-@Entity('golf-courses')
+@Entity('golf_courses')
 export class GolfCourse extends AbstractEntity {
-  @Column()
+  @Column({ comment: '유저 아이디' })
   userId: number;
 
-  @Column()
+  @Column({ comment: '골프장 이름' })
   courseName: string;
 
-  @Column()
+  @Column({ comment: '경도(longitude)', type: 'float' })
+  lng: number;
+
+  @Column({ comment: '위도(latitude)', type: 'float' })
   lat: number;
 
-  @Column()
-  lng: number;
+  @Column({ comment: '골프장 주소', nullable: true })
+  address?: string;
+
+  @Column({ comment: '골프장 전화번호', nullable: true })
+  phone?: string;
+
+  @Column({ comment: '골프장 웹 url', nullable: true })
+  website?: string;
 }

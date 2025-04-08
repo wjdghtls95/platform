@@ -13,4 +13,13 @@ export class DefaultController {
 
     return ResponseEntity.ok().body(result);
   }
+
+  // @Get('/decorate/test')
+  // @ApiResponseEntity({ summary: 'auth 데코레이터 테스트' })
+  // @Auth()
+  // async getUsers(@CurrentUser() user: AuthPayload): Promise<any> {
+  //   return {
+  //     userId: user.userId,
+  //   };
+  // }
 }

@@ -3,6 +3,7 @@ import baseDatabaseConfig from './base-database.config';
 import { Auth } from '@libs/dao/auth/auth.entity';
 import { User } from '@libs/dao/user/users.entity';
 import { GolfCourse } from '@libs/dao/golf-course/golf-course.entity';
+import { Favorite } from '@libs/dao/favorite/favorite.entity';
 
 export default registerAs('platform-database', () => ({
   ...baseDatabaseConfig,
@@ -16,5 +17,5 @@ export default registerAs('platform-database', () => ({
   database: process.env.PLATFORM_DB_DATABASE,
   synchronize: true,
 
-  entities: [Auth, User, GolfCourse],
+  entities: [Auth, User, GolfCourse, Favorite],
 }));

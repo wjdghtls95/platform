@@ -29,12 +29,10 @@ export class TokenUtil {
    * access token 복호화
    */
   static decodeAccessToken(accessToken: string): AccessToken {
-    {
-      return EncryptUtil.decode(
-        accessToken,
-        ACCESS_TOKEN_SECRET_KEY,
-      ) satisfies AccessToken;
-    }
+    return EncryptUtil.decode(
+      accessToken,
+      ACCESS_TOKEN_SECRET_KEY,
+    ) satisfies AccessToken;
   }
 
   /**

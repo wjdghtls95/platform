@@ -20,6 +20,12 @@ import { GolfCourseModule } from '@libs/dao/golf-course/golf-course.module';
 import { GolfCourseController } from './golf-course/golf-course.controller';
 import { GolfCourseService } from './golf-course/golf-course.service';
 import { KakaoModule } from '@libs/common/external/kakao/kakao.module';
+import { IpLocationModule } from '@libs/common/external/ip/ip-location.module';
+import { FavoriteService } from './favorite/favorite.service';
+import { FavoriteModule } from '@libs/dao/favorite/favorite.module';
+import { FavoriteController } from './favorite/favorite.controller';
+import { DefaultController } from './default/default.controller';
+import { RedisModule } from '@libs/dao/redis/redis.module';
 
 @Module({
   imports: [
@@ -36,6 +42,9 @@ import { KakaoModule } from '@libs/common/external/kakao/kakao.module';
       useFactory: async (config) => config,
     }),
 
+    // Redis Module
+    RedisModule,
+
     // health check
     DefaultModule,
 
@@ -44,18 +53,25 @@ import { KakaoModule } from '@libs/common/external/kakao/kakao.module';
 
     // external
     KakaoModule,
+    IpLocationModule,
 
     // domain
     AuthModule,
     UsersModule,
     GolfCourseModule,
+    FavoriteModule,
   ],
-  controllers: [AuthController, UsersController, GolfCourseController],
+  controllers: [
+    // domain
+    AuthController,
+    UsersController,
+    GolfCourseController,
+    FavoriteController,
+  ],
   providers: [
     { provide: APP_PIPE, useValue: new ValidationPipe({ transform: true }) },
     { provide: APP_FILTER, useClass: AllExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: TransactionInterceptor },
-    // { provide: APP_GUARD, useClass: JwtGuard },
 
     // oauth
     OAuthGoogleService,
@@ -65,6 +81,9 @@ import { KakaoModule } from '@libs/common/external/kakao/kakao.module';
     AuthService,
     UsersService,
     GolfCourseService,
+    FavoriteService,
+
+    // provider
   ],
 })
 export class PlatformModule {}
