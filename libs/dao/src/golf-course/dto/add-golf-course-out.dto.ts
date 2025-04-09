@@ -3,17 +3,21 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { BaseOutDto } from '@libs/common/dto/base-out.dto';
 
 export class GolfCourseOutDto extends BaseOutDto {
+  @ApiProperty({ description: '골프장 아이디' })
+  @IsNumber()
+  id: number;
+
   @ApiProperty({ description: '골프장 이름' })
   @IsString()
-  courseName: string;
+  golfCourseName: string;
 
   @ApiProperty({ description: 'kakao docs x (경도 longitude)' })
-  @IsNumber()
-  lng: number;
+  @IsString()
+  lng: string;
 
   @ApiProperty({ description: 'kakao docs y (위도 latitude)' })
-  @IsNumber()
-  lat: number;
+  @IsString()
+  lat: string;
 
   @ApiProperty({ description: '주소' })
   @IsOptional()

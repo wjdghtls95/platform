@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { INTERNAL_ERROR_CODE_DESC } from '@libs/common/constants/internal-error-code-desc.constants';
 
 class BodyBuilder {
   private readonly _code: number;
@@ -25,10 +26,6 @@ export class ResponseEntity<T> {
   @ApiPropertyOptional() private readonly data?: T | T[];
   @ApiPropertyOptional() private readonly payLoad?: object;
   @ApiPropertyOptional() private readonly message?: string;
-  @ApiProperty() private readonly isSuccess: boolean;
-  @ApiProperty() private readonly success: boolean;
-  @ApiProperty() private readonly msg: string;
-  @ApiProperty() private readonly errorCd: number;
 
   constructor(
     code: number,
@@ -50,6 +47,9 @@ export class ResponseEntity<T> {
   }
 
   static error<T>(code = 99999, message = 'Unknown Error'): ResponseEntity<T> {
+    if (process.env.NODE_ENV !== 'production') {
+      message = `${message} (${INTERNAL_ERROR_CODE_DESC[code]})`;
+    }
     return new ResponseEntity<T>(code, undefined, message);
   }
 }

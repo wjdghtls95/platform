@@ -27,14 +27,14 @@ export class GolfCourseRepository extends AbstractRepository<GolfCourse> {
    */
   async findByUserIdAndCoordinates(
     userId: number,
-    courseName: string,
-    lng: number,
-    lat: number,
+    golfCourseName: string,
+    lng: string,
+    lat: string,
   ): Promise<GolfCourse> {
     return this.getQueryBuilder
       .where(`${this.alias}.userId=:userId`, { userId: userId })
-      .andWhere(`${this.alias}.courseName=:courseName`, {
-        courseName: courseName,
+      .andWhere(`${this.alias}.golfCourseName=:golfCourseName`, {
+        golfCourseName: golfCourseName,
       })
       .andWhere(`${this.alias}.lng=:lng`, { lng: lng })
       .andWhere(`${this.alias}.lat=:lat`, { lat: lat })

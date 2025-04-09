@@ -49,13 +49,12 @@ export class GolfCourseService {
   async findNearByPlace(
     searchNearByInDto: SearchNearByInDto,
   ): Promise<SearchOutDto> {
-    const { lng, lat, radius, kakaoCategoryCode, page, size } =
-      searchNearByInDto;
+    const { lng, lat, radius, category, page, size } = searchNearByInDto;
 
     const response = await this.kakaoProvider.get({
       method: 'category.json',
       params: {
-        category_group_code: KAKAO_CATEGORY_CODE[kakaoCategoryCode],
+        category_group_code: KAKAO_CATEGORY_CODE[category],
         x: lng,
         y: lat,
         radius: radius, //
@@ -78,13 +77,13 @@ export class GolfCourseService {
     userId: number,
     addGolfCourseInDto: AddGolfCourseInDto,
   ): Promise<GolfCourseOutDto> {
-    const { courseName, lng, lat } = addGolfCourseInDto;
+    const { golfCourseName, lng, lat } = addGolfCourseInDto;
 
     // 이미 등록된 골프장인지 확인
     const isExisted =
       await this.golfCourseRepository.findByUserIdAndCoordinates(
         userId,
-        courseName,
+        golfCourseName,
         lng,
         lat,
       );

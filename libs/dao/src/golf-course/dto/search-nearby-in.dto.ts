@@ -1,6 +1,6 @@
 import { ExcludeAbstractTimeDto } from '@libs/dao/base/exclude-abstract.time.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsString, IsNumber, IsOptional } from 'class-validator';
 import {
   KAKAO_CATEGORY_CODE,
   KakaoCategoryCode,
@@ -8,12 +8,12 @@ import {
 
 export class SearchNearByInDto extends ExcludeAbstractTimeDto {
   @ApiProperty({ description: 'kakao docs x (경도 longitude)' })
-  @IsNumber()
-  lng: number;
+  @IsString()
+  lng: string;
 
   @ApiProperty({ description: 'kakao docs y (위도 latitude)' })
-  @IsNumber()
-  lat: number;
+  @IsString()
+  lat: string;
 
   @ApiProperty({ description: '반경 (m)', default: 2000 })
   @IsNumber()
@@ -24,7 +24,7 @@ export class SearchNearByInDto extends ExcludeAbstractTimeDto {
     enum: Object.keys(KAKAO_CATEGORY_CODE),
   })
   @IsEnum(Object.keys(KAKAO_CATEGORY_CODE))
-  kakaoCategoryCode: KakaoCategoryCode;
+  category: KakaoCategoryCode;
 
   @ApiProperty({ description: '페이지 번호', required: false, default: 1 })
   @IsOptional()

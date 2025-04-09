@@ -28,6 +28,11 @@ export const INTERNAL_ERROR_CODE_DESC = {
   [e.GOLF_COURSE_NOT_FOUND]: '리스트에 등록되지 않은 골프장',
   [e.GOLF_COURSE_ALREADY_CREATED]: '리스트에 이미 등록된 골프장',
 
+  // FAVORITE PLACE
+  [e.FAVORITE_PLACE_ALREADY_EXISTED]: '즐겨찾기에 이미 존재',
+  [e.FAVORITE_PLACE_SAVE_FAILED]: '즐겨찾기 저장 실패',
+  [e.FAVORITE_PLACE_DELETE_FAILED]: '즐겨찾기 삭제 실패',
+
   // EXTERNAL
   [e.EXTERNAL_SERVICE_ERROR]: '외부 API 호출 실패',
   [e.EXTERNAL_LOCATION_LOOKUP_FAILED]: '외부 API를 통한 위치 조회 실패',

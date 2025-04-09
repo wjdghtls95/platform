@@ -11,13 +11,19 @@ export class Favorite extends AbstractEntity {
   golfCourseId: number;
 
   @Column({ comment: '외부 API 장소 아이디' })
-  placeId: string;
+  placeId: number;
 
   @Column({ comment: '장소 이름' })
   name: string;
 
   @Column({ comment: '장소 카테고리' })
   category: string;
+
+  @Column({ comment: '경도(longitude)' })
+  lng: string;
+
+  @Column({ comment: '위도(latitude)' })
+  lat: string;
 
   /**
    * TODO.. 다른 open api 로 검색시 provider 주석 해제

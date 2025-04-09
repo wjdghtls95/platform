@@ -7,13 +7,13 @@ export class GolfCourse extends AbstractEntity {
   userId: number;
 
   @Column({ comment: '골프장 이름' })
-  courseName: string;
+  golfCourseName: string;
 
-  @Column({ comment: '경도(longitude)', type: 'float' })
-  lng: number;
+  @Column({ comment: '경도(longitude)' })
+  lng: string;
 
-  @Column({ comment: '위도(latitude)', type: 'float' })
-  lat: number;
+  @Column({ comment: '위도(latitude)' })
+  lat: string;
 
   @Column({ comment: '골프장 주소', nullable: true })
   address?: string;

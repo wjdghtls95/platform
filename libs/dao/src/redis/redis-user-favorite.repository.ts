@@ -19,7 +19,7 @@ export class RedisUserFavoriteRepository extends AbstractRedisRepository {
   async getFavorites(
     userId: number,
     golfCourseId: number,
-  ): Promise<Record<string, RedisAddFavoriteDto>> {
+  ): Promise<Record<number, RedisAddFavoriteDto>> {
     const key = REDIS_KEY.userFavorites(userId, golfCourseId);
 
     return (await this.getJson(key)) ?? {};
@@ -31,7 +31,7 @@ export class RedisUserFavoriteRepository extends AbstractRedisRepository {
   async setFavorites(
     userId: number,
     golfCourseId: number,
-    data: Record<string, RedisAddFavoriteDto>,
+    data: Record<number, RedisAddFavoriteDto>,
   ): Promise<void> {
     const key = REDIS_KEY.userFavorites(userId, golfCourseId);
 
@@ -44,7 +44,7 @@ export class RedisUserFavoriteRepository extends AbstractRedisRepository {
   async removeFavorite(
     userId: number,
     golfCourseId: number,
-    placeId: string,
+    placeId: number,
   ): Promise<void> {
     const key = REDIS_KEY.userFavorites(userId, golfCourseId);
     const cached = await this.getFavorites(userId, golfCourseId);
