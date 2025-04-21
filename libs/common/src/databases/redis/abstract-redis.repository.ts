@@ -6,8 +6,8 @@ export abstract class AbstractRedisRepository {
   protected redis: Redis;
   protected readonly dbNumber: number;
 
-  createRedisClient(host: string, port: number): void {
-    this.redis = RedisFactory.createRedisClient(host, port, this.dbNumber);
+  createRedisClient(): void {
+    this.redis = RedisFactory.createRedisClient(this.dbNumber);
   }
 
   async pipeline(): Promise<ChainableCommander> {

@@ -10,6 +10,7 @@ import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.
 import { UsersRepository } from '@libs/dao/user/users.repository';
 import { LoginInDto } from '@libs/dao/auth/dto/login-in.dto';
 import { AuthRepository } from '@libs/dao/auth/auth.repository';
+import { TestRedisDataSourceUtils } from '../utils/test-redis-data-source.utils';
 
 describe('AuthService', () => {
   let module: TestingModule;
@@ -37,16 +38,16 @@ describe('AuthService', () => {
   });
 
   afterEach(async () => {
-    await TestTransactionUtils.rollback();
+    await Promise.all([
+      TestTransactionUtils.rollback(),
+      TestRedisDataSourceUtils.redisFlushDb(module),
+    ]);
   });
 
   afterAll(async () => {
-    // await TestDataSourceUtils.clearDataSource(module);
-    // await module.close();
-
     await Promise.all([
       TestDataSourceUtils.clearDataSource(module),
-      module.close(),
+      TestRedisDataSourceUtils.clearRedisDataSource(module),
     ]);
   });
 

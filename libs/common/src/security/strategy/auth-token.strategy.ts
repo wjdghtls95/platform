@@ -2,7 +2,6 @@ import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import Strategy from 'passport-headerapikey';
-import { SecurityService } from '../security.service';
 import { TokenUtil } from '@libs/common/utils/token.util';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';

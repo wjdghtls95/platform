@@ -85,7 +85,7 @@ export class FavoriteService {
 
       return AddFavoriteOutDto.of(favoritePlace);
     } catch (e) {
-      // Redis rollback (정합성 맞추기 위해 삭제)
+      // Redis Rollback (정합성 맞추기 위해 삭제)
       await Promise.all([
         this.redisUserFavoriteRepository.removeFavorite(
           userId,

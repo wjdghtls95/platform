@@ -24,7 +24,6 @@ import { IpLocationModule } from '@libs/common/external/ip/ip-location.module';
 import { FavoriteService } from './favorite/favorite.service';
 import { FavoriteModule } from '@libs/dao/favorite/favorite.module';
 import { FavoriteController } from './favorite/favorite.controller';
-import { DefaultController } from './default/default.controller';
 import { RedisModule } from '@libs/dao/redis/redis.module';
 import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
 

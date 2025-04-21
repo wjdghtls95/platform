@@ -20,7 +20,7 @@ export class TransactionInterceptor implements NestInterceptor {
       catchError(async (e) => {
         await TypeOrmHelper.rollbackTransactions();
 
-        // await TypeOrmHelper.releases();
+        await TypeOrmHelper.releases();
 
         throw e;
       }),

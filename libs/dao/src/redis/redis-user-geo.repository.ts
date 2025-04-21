@@ -7,10 +7,7 @@ import { RedisGeoSearchDto } from '@libs/dao/redis/dto/redis-geo-search.dto';
 export class RedisUserGeoRepository extends AbstractRedisRepository {
   constructor() {
     super();
-    this.createRedisClient(
-      process.env.REDIS_DB_HOST,
-      Number(process.env.REDIS_DB_PORT),
-    );
+    this.createRedisClient();
   }
 
   /**

@@ -7,10 +7,7 @@ import { RedisAddFavoriteDto } from '@libs/dao/redis/dto/redis-add-favorite.dto'
 export class RedisUserFavoriteRepository extends AbstractRedisRepository {
   constructor() {
     super();
-    this.createRedisClient(
-      process.env.REDIS_DB_HOST,
-      Number(process.env.REDIS_DB_PORT),
-    );
+    this.createRedisClient();
   }
 
   /**

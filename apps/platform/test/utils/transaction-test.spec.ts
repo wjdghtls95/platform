@@ -9,6 +9,7 @@ import { UsersRepository } from '@libs/dao/user/users.repository';
 import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
+import { TestRedisDataSourceUtils } from './test-redis-data-source.utils';
 
 describe('Transaction Test', () => {
   let module: TestingModule;
@@ -47,10 +48,13 @@ describe('Transaction Test', () => {
 
   afterEach(async () => {
     await TestTransactionUtils.rollback();
+    await TestRedisDataSourceUtils.redisFlushDb(module);
   });
 
   afterAll(async () => {
     await TestDataSourceUtils.clearDataSource(module);
+    await TestRedisDataSourceUtils.clearRedisDataSource(module);
+    await module.close();
   });
 
   it('트랜잭션 성공시 데이터가 정상적으로 저장', async () => {

@@ -64,6 +64,7 @@ export class CacheSyncProvider {
       if (!courseGroups.has(favorite.golfCourseId)) {
         courseGroups.set(favorite.golfCourseId, {});
       }
+
       courseGroups.get(favorite.golfCourseId)![favorite.placeId] = {
         golfCourseId: favorite.golfCourseId,
         placeId: favorite.placeId,

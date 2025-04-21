@@ -6,7 +6,7 @@ import {
 } from '@nestjs/typeorm';
 import { DynamicModule, Provider } from '@nestjs/common';
 import { TYPEORM_ENTITY_REPOSITORY } from '@libs/common/databases/typeorm/typeorm-ex.decorator';
-import { DataSource } from 'typeorm';
+import { DataSource, ObjectType } from 'typeorm';
 
 const customDataSources: Record<string, DataSource> = {};
 const customRepositories: Record<string, Record<string, any>> = {};
@@ -80,6 +80,19 @@ export class TypeOrmExModule {
       module: TypeOrmExModule,
     };
   }
+}
+
+export function getCustomRepository<T>(
+  repository: ObjectType<T>,
+  dataSourceName: string,
+): T {
+  const repositoryDataSource = customRepositories[dataSourceName];
+
+  if (repositoryDataSource && repositoryDataSource[repository.name]) {
+    return repositoryDataSource[repository.name];
+  }
+
+  return null;
 }
 
 export function getDataSource(dataSourceName: string): DataSource | null {

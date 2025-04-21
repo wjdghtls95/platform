@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AUTH_TYPE, AuthType } from '@libs/common/constants/auth.constants';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class LoginInDto {

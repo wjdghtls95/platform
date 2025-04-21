@@ -7,6 +7,8 @@ import { InsertResult } from 'typeorm/query-builder/result/InsertResult';
 import { UpsertOptions } from 'typeorm/repository/UpsertOptions';
 import { SaveOptions } from 'typeorm/repository/SaveOptions';
 import { TypeOrmHelper } from '@libs/common/databases/typeorm/typeorm.helper';
+import { ClassConstructor } from 'class-transformer';
+import { getCustomRepository } from '@libs/common/databases/typeorm/typeorm-ex.module';
 
 export abstract class AbstractRepository<Entity> extends Repository<Entity> {
   protected readonly alias: string = super.metadata.tableName;
@@ -99,5 +101,9 @@ export abstract class AbstractRepository<Entity> extends Repository<Entity> {
       .from(this.alias)
       .whereInIds(ids)
       .execute();
+  }
+
+  static instance<T>(this: ClassConstructor<T>, database: string): T {
+    return getCustomRepository(this, database);
   }
 }
