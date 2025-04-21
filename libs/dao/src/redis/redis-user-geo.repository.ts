@@ -13,54 +13,19 @@ export class RedisUserGeoRepository extends AbstractRedisRepository {
     );
   }
 
-  // /**
-  //  * 유저 위치 저장 (GEOADD)
-  //  */
-  // async setUserLocation(
-  //   userId: string,
-  //   lat: number,
-  //   lng: number,
-  // ): Promise<void> {
-  //   await this.redis.geoadd(this.GEO_KEY, lng, lat, userId);
-  // }
-  //
-  // /**
-  //  * 유저 위치 조회 (GEOPOS)
-  //  */
-  // async getUserLocation(
-  //   userId: string,
-  // ): Promise<{ lat: number; lng: number } | null> {
-  //   const result = await this.redis.geopos(this.GEO_KEY, userId);
-  //
-  //   if (!result[0]) return null;
-  //
-  //   return { lng: parseFloat(result[0][0]), lat: parseFloat(result[0][1]) };
-  // }
-  //
-  // /**
-  //  * 반경 내 유저 찾기 (GEORADIUS)
-  //  */
-  // async getNearbyUsers(
-  //   lng: number,
-  //   lat: number,
-  //   radius: number,
-  // ): Promise<unknown[]> {
-  //   return this.redis.georadius(this.GEO_KEY, lng, lat, radius, 'km');
-  // }
-
   /**
    * 유저 위치 저장 (GEOADD)
    */
   async geoAdd(
     userId: number,
     golfCourseId: number,
-    placeId: string,
-    lat: number,
-    lng: number,
+    placeId: number,
+    lat: string,
+    lng: string,
   ): Promise<void> {
     const key = REDIS_KEY.userGeo(userId, golfCourseId);
 
-    await this.redis.geoadd(key, lat, lng, placeId);
+    await this.redis.geoadd(key, lng, lat, placeId);
   }
 
   /**
@@ -69,7 +34,7 @@ export class RedisUserGeoRepository extends AbstractRedisRepository {
   async remove(
     userId: number,
     golfCourseId: number,
-    placeId: string,
+    placeId: number,
   ): Promise<void> {
     const key = REDIS_KEY.userGeo(userId, golfCourseId);
 
@@ -79,12 +44,8 @@ export class RedisUserGeoRepository extends AbstractRedisRepository {
   /**
    *  반경 내 유저 찾기 (GEORADIUS)
    */
-  async geoSearch(
-    userId: number,
-    golfCourseId: number,
-    geoSearchDto: RedisGeoSearchDto,
-  ) {
-    const { lat, lng, radius, unit } = geoSearchDto;
+  async geoSearch(userId: number, redisGeoSearchDto: RedisGeoSearchDto) {
+    const { golfCourseId, lat, lng, radius, unit } = redisGeoSearchDto;
 
     const key = REDIS_KEY.userGeo(userId, golfCourseId);
 

@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseOutDto } from '@libs/common/dto/base-out.dto';
-import { IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class UserLocationOutDto extends BaseOutDto {
   @ApiProperty({ description: 'kakao docs x (경도 longitude)' })
-  @IsNumber()
-  lng: number;
+  @IsString()
+  lng: string;
 
   @ApiProperty({ description: 'kakao docs y (위도 latitude)' })
-  @IsNumber()
-  lat: number;
+  @IsString()
+  lat: string;
 }

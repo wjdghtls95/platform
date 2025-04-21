@@ -26,6 +26,11 @@ export const INTERNAL_ERROR_CODE = {
   GOLF_COURSE_NOT_FOUND: 51, // 리스트에 등록되지 않은 골프장
   GOLF_COURSE_ALREADY_CREATED: 52, // 리스트에 이미 등록된 골프장
 
+  // FAVORITE PLACE : 71 ~ 90
+  FAVORITE_PLACE_ALREADY_EXISTED: 71, // 즐겨찾기에 이미 존재
+  FAVORITE_PLACE_SAVE_FAILED: 72, // 즐겨찾기 저장 실패
+  FAVORITE_PLACE_DELETE_FAILED: 73, // 즐겨찾기 삭제 실패
+
   // EXTERNAL : 101 ~ 120
   EXTERNAL_SERVICE_ERROR: 101, // 외부 API 호출 자체 실패
   EXTERNAL_LOCATION_LOOKUP_FAILED: 102, // 외부 API를 통한 위치 조회 실패

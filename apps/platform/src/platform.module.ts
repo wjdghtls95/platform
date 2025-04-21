@@ -26,6 +26,7 @@ import { FavoriteModule } from '@libs/dao/favorite/favorite.module';
 import { FavoriteController } from './favorite/favorite.controller';
 import { DefaultController } from './default/default.controller';
 import { RedisModule } from '@libs/dao/redis/redis.module';
+import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
 
 @Module({
   imports: [
@@ -84,6 +85,7 @@ import { RedisModule } from '@libs/dao/redis/redis.module';
     FavoriteService,
 
     // provider
+    CacheSyncProvider,
   ],
 })
 export class PlatformModule {}

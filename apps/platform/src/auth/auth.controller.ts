@@ -64,6 +64,7 @@ export class AuthController {
   }
 
   @Post('/token/refresh')
+  @Auth()
   @ApiResponseEntity({ type: OAuthVerifyOutDto, summary: 'accessToken 갱신' })
   async RefreshAccessToken(
     @Body() refreshAccessTokenInDto: RefreshAccessTokenInDto,

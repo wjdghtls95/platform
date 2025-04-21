@@ -19,13 +19,17 @@ import { RefreshAccessTokenInDto } from '@libs/dao/auth/dto/refresh-access-token
 import { OAuthVerifyOutDto } from '@libs/dao/auth/dto/oauth-verify-out.dto';
 import { AuthRepository } from '@libs/dao/auth/auth.repository';
 import { Auth } from '@libs/dao/auth/auth.entity';
+import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(UsersRepository) private readonly usersRepository: UsersRepository,
     @Inject(AuthRepository) private readonly authRepository: AuthRepository,
+
     private readonly oauthGoogleService: OAuthGoogleService,
+
+    private readonly cacheSyncProvider: CacheSyncProvider,
   ) {}
 
   /**
@@ -94,6 +98,9 @@ export class AuthService {
       refreshToken: refreshToken,
     });
 
+    // 로그인 시 즐겨찾기 캐시 조건부 동기화 실행
+    await this.cacheSyncProvider.syncCacheByCondition(user.id);
+
     return LoginOutDto.fromEntity(auth).setToken(accessToken);
   }
 
@@ -141,6 +148,8 @@ export class AuthService {
     await this.authRepository.updateById(user.id, {
       refreshToken: refreshToken,
     });
+
+    await this.cacheSyncProvider.syncCacheByCondition(user.id);
 
     return OAuthTokenDto.of({
       userId: user.id,

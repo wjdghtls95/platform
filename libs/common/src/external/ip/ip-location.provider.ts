@@ -13,7 +13,7 @@ export class IpLocationProvider extends BaseHttpService {
   /**
    * ip로 위치(위도, 경도) 조회
    */
-  async getLocation(ip: string): Promise<{ lat: number; lng: number }> {
+  async getLocation(ip: string): Promise<{ lat: string; lng: string }> {
     try {
       const response = await super.get({
         method: `${ip}/json`,
