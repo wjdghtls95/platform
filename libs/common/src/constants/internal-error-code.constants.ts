@@ -35,6 +35,9 @@ export const INTERNAL_ERROR_CODE = {
   EXTERNAL_SERVICE_ERROR: 101, // 외부 API 호출 자체 실패
   EXTERNAL_LOCATION_LOOKUP_FAILED: 102, // 외부 API를 통한 위치 조회 실패
 
+  // FILE_UPLOAD : 121 ~ 130
+  FILE_UPLOAD_UNSUPPORTED_MEDIA_TYPE: 121, // 파일 업로드 타입이 다름
+
   // DATABASE
   DB_UPDATE_FAILED: 9999, // db 업데이트 실패
 } as const;

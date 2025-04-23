@@ -26,6 +26,10 @@ import { FavoriteModule } from '@libs/dao/favorite/favorite.module';
 import { FavoriteController } from './favorite/favorite.controller';
 import { RedisModule } from '@libs/dao/redis/redis.module';
 import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
+import { SwingAnalysisController } from './swing-analysis/swing-analysis.controller';
+import { SwingAnalysisModule } from '@libs/dao/swing-analysis/swing-analysis.module';
+import { SwingAnalysisService } from './swing-analysis/swing-analysis.service';
+import { FileUploadModule } from '@libs/common/external/file-upload/file-upload.module';
 
 @Module({
   imports: [
@@ -34,6 +38,8 @@ import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.p
 
     // cls
     ClsModule.forRoot({ global: true, middleware: { mount: true } }),
+
+    FileUploadModule.forRoot(),
 
     // platform database (rdbms)
     TypeOrmExModule.forRootAsync({
@@ -60,6 +66,7 @@ import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.p
     UsersModule,
     GolfCourseModule,
     FavoriteModule,
+    SwingAnalysisModule,
   ],
   controllers: [
     // domain
@@ -67,6 +74,7 @@ import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.p
     UsersController,
     GolfCourseController,
     FavoriteController,
+    SwingAnalysisController,
   ],
   providers: [
     { provide: APP_PIPE, useValue: new ValidationPipe({ transform: true }) },
@@ -82,6 +90,7 @@ import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.p
     UsersService,
     GolfCourseService,
     FavoriteService,
+    SwingAnalysisService,
 
     // provider
     CacheSyncProvider,

@@ -1,4 +1,3 @@
-// 3. 유저가 실제 검색한 장소 기록 엔티티
 import { AbstractEntity } from '@libs/common/databases/typeorm/abstract.entity';
 import { Column, CreateDateColumn, Entity } from 'typeorm';
 

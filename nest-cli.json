@@ -10,15 +10,6 @@
   "monorepo": true,
   "root": "apps/platform",
   "projects": {
-    "boilerplate-msa": {
-      "type": "application",
-      "root": "apps/platform",
-      "entryFile": "main",
-      "sourceRoot": "apps/platform/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/platform/tsconfig.app.json"
-      }
-    },
     "platform": {
       "type": "application",
       "root": "apps/platform",

@@ -37,6 +37,9 @@ export const INTERNAL_ERROR_CODE_DESC = {
   [e.EXTERNAL_SERVICE_ERROR]: '외부 API 호출 실패',
   [e.EXTERNAL_LOCATION_LOOKUP_FAILED]: '외부 API를 통한 위치 조회 실패',
 
+  // FILE_UPLOAD : 121 ~ 130
+  [e.FILE_UPLOAD_UNSUPPORTED_MEDIA_TYPE]: '파일 업로드 타입이 다름',
+
   // DATABASE
   [e.DB_UPDATE_FAILED]: 'db 얻데이트 실패',
 } as const;

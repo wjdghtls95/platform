@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 
-export abstract class BaseHttpService {
+export abstract class AbstractHttpService {
   protected baseUrl?: string;
   protected headers?: any;
   protected data?: unknown;
@@ -41,17 +41,25 @@ export abstract class BaseHttpService {
   /**
    * http 수정 method
    */
-  async post(options: { method: string; data?: any }): Promise<any> {
+  async post(options: {
+    method: string;
+    data?: any;
+    headers?: any; // FormData 처럼 요청마다 동적으로 생성되는 headers가 필요
+  }): Promise<any> {
     const url = `${this.baseUrl}/${options.method}`;
 
     this.data = options.data || undefined;
 
     try {
       const response = await firstValueFrom(
-        this.httpService.post(url, this?.data, { headers: this.headers }),
+        this.httpService.post(url, this?.data, {
+          headers: options.headers || this.headers,
+        }),
       );
 
-      return JSON.parse(response.data);
+      return typeof response.data === 'object'
+        ? response.data
+        : JSON.parse(response.data);
     } catch (e) {
       throw new ServerErrorException(e.status, e.statusText);
     }

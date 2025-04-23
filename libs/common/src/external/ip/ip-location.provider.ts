@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { BaseHttpService } from '@libs/common/networks/base-http-service';
+import { AbstractHttpService } from '@libs/common/networks/abstract-http-service';
 import { HttpService } from '@nestjs/axios';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 
 @Injectable()
-export class IpLocationProvider extends BaseHttpService {
+export class IpLocationProvider extends AbstractHttpService {
   constructor(protected readonly httpService: HttpService) {
-    super(httpService, `${process.env.IP_URI}`);
+    super(httpService, `${process.env.SEARCH_IP_URI}`);
   }
 
   /**

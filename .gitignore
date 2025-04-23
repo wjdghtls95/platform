@@ -17,7 +17,6 @@ lerna-debug.log*
 config/.game.test.env
 config/.*.test.env
 
-
 # OS
 .DS_Store
 
@@ -40,3 +39,6 @@ config/.*.test.env
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# directory
+uploads
