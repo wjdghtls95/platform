@@ -18,12 +18,6 @@ export class SwingAnalysis extends AbstractEntity {
   @Column({ comment: 'Mediapipe 가 분석한 유효 프레임 수' })
   landmarkCount: number; // 스윙 품질 판단용
 
-  @Column({ comment: '직접 전송 or S3 연동' })
-  sourceType: 'direct' | 's3'; // 나중에 변경 가능
-
-  @Column({ comment: '서버 로컬 저장경로', nullable: true })
-  filePath?: string;
-
   @Column({ comment: '업로드된 파일 URL', nullable: true })
   s3Url?: string;
 }

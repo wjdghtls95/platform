@@ -26,12 +26,7 @@ export class SwingAnalysisController {
   @ApiResponseEntity({
     summary: '스윙 영상 로컬 업로드',
   })
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: FileUploadHelper.storage(),
-      fileFilter: FileUploadHelper.fileFilter,
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   @ApiFileUpload('file')
   async analyzeDirect(
     @UploadedFile() file: Express.Multer.File,

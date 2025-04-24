@@ -24,7 +24,11 @@ export class SwingAnalysisService {
   ): Promise<SwingAnalysisOutDto> {
     const form = new FormData();
 
-    form.append('file', fs.createReadStream(file.path));
+    // disk storage 사용시
+    // form.append('file', fs.createReadStream(file.path));
+
+    // memory storage
+    form.append('file', file.buffer, { filename: file.originalname });
 
     const headers = form.getHeaders();
 
@@ -42,8 +46,6 @@ export class SwingAnalysisService {
         elbowAvgAngle: result.elbowAvgAngle,
         feedback: result.feedback,
         landmarkCount: result.landmarkCount,
-        sourceType: 'direct',
-        filePath: file.path,
       }),
     );
 
