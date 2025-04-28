@@ -17,10 +17,8 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
           chmod 600 key.pem
 
-      # 디버깅 : set -eux
       - name: Deploy to EC2
         run: |
-#          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
           ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR -i key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -eux
                
@@ -37,7 +35,6 @@ jobs:
             echo "✅ 배포 완료"
           EOF
 
-#        배포 후 보안으로인해 key.pem 삭제
       - name: Remove SSH Key
         if: always()
         run: rm -f key.pem
