@@ -44,6 +44,6 @@ jobs:
           EOF
 
 #        배포 후 보안으로인해 key.pem 삭제
-        - name: Remove SSH Key
-          if: always()
-          run: rm -f key.pem
+      - name: Remove SSH Key
+        if: always()
+        run: rm -f key.pem
