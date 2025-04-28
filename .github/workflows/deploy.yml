@@ -17,13 +17,12 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
           chmod 600 key.pem
 
-      # 디버깅 : set -eux & trap
+      # 디버깅 : set -eux
       - name: Deploy to EC2
         run: |
 #          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
           ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR -i key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -eux
-            trap 'echo "💥 에러 발생! 실패한 라인: $LINENO" >&2; exit 1' ERR
                
             echo "✅ 배포 시작"
             cd /home/ec2-user/app
@@ -36,11 +35,6 @@ jobs:
             docker-compose up -d --build   
                
             echo "✅ 배포 완료"
-#            set -eux
-#            cd /home/ec2-user/app
-#            git pull origin main
-#            docker compose down || true
-#            docker compose up -d --build
           EOF
 
 #        배포 후 보안으로인해 key.pem 삭제
