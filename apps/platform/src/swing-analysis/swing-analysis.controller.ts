@@ -14,7 +14,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { SwingAnalysisOutDto } from '@libs/dao/swing-analysis/dto/swing-analysis-out.dto';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
 import { ApiFileUpload } from '@libs/common/decorators/api-file-upload.decorator';
-import { FileUploadHelper } from '@libs/common/external/file-upload/file-upload.helper';
 
 @Controller('swing-analysis')
 @ApiTags('Swing Analysis')

@@ -29,7 +29,6 @@ import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.p
 import { SwingAnalysisController } from './swing-analysis/swing-analysis.controller';
 import { SwingAnalysisModule } from '@libs/dao/swing-analysis/swing-analysis.module';
 import { SwingAnalysisService } from './swing-analysis/swing-analysis.service';
-import { FileUploadModule } from '@libs/common/external/file-upload/file-upload.module';
 
 @Module({
   imports: [
@@ -38,8 +37,6 @@ import { FileUploadModule } from '@libs/common/external/file-upload/file-upload.
 
     // cls
     ClsModule.forRoot({ global: true, middleware: { mount: true } }),
-
-    FileUploadModule.forRoot(),
 
     // platform database (rdbms)
     TypeOrmExModule.forRootAsync({
