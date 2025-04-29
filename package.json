@@ -46,6 +46,7 @@
     "passport-headerapikey": "^1.2.2",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
+    "rimraf": "^6.0.1",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.20",
     "typeorm-naming-strategies": "^4.1.0"
