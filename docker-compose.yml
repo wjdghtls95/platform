@@ -5,7 +5,7 @@ services:
     container_name: platform-server
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: platform.Dockerfile
     ports:
       - "3000:3000"
     restart: always
