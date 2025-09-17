@@ -2,7 +2,7 @@ import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { RealIp } from 'nestjs-real-ip';
 import { UsersService } from './users.service';
-import { UserLocationOutDto } from '@libs/dao/user/dto/user-location-out.dto';
+import { UserLocationOutDto } from '@libs/dao/platform/user/dto/user-location-out.dto';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
 import { ApiResponseEntity } from '@libs/common/decorators/api-response-entity.decorator';
 import { Auth } from '@libs/common/decorators/auth.decorator';

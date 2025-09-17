@@ -6,11 +6,9 @@ import { TestDataSourceUtils } from '../utils/test-data-source.utils';
 import { TestRedisDataSourceUtils } from '../utils/test-redis-data-source.utils';
 import { GolfCourseService } from '../../src/golf-course/golf-course.service';
 import { DATABASE_NAME } from '@libs/common/constants/database.constants';
-import { GolfCourseRepository } from '@libs/dao/golf-course/golf-course.repository';
+import { GolfCourseRepository } from '@libs/dao/platform/golf-course/golf-course.repository';
 import { TestUserUtils } from '../utils/test-user.utils';
-import { User } from '@libs/dao/user/users.entity';
-import { AddGolfCourseInDto } from '@libs/dao/golf-course/dto/add-golf-course-in.dto';
-import { GolfCourse } from '@libs/dao/golf-course/golf-course.entity';
+import { AddGolfCourseInDto } from '@libs/dao/platform/golf-course/dto/add-golf-course-in.dto';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 
 describe('Golf Course Service', () => {
@@ -20,7 +18,6 @@ describe('Golf Course Service', () => {
 
   let golfCourseRepository: GolfCourseRepository;
 
-  let user: User;
   let userId: number;
 
   beforeAll(async () => {
@@ -38,7 +35,7 @@ describe('Golf Course Service', () => {
     await TypeOrmHelper.Transactional([DATABASE_NAME.GOLF_COURSE]);
 
     // test login
-    user = await TestUserUtils.login(userId);
+    await TestUserUtils.login(userId);
   });
 
   afterEach(async () => {

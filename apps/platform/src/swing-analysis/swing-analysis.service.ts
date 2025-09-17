@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as fs from 'fs';
 import * as FormData from 'form-data';
 import { SwingAnalysisProvider } from '@libs/common/external/swing-analysis/swing-analysis.provider';
-import { SwingAnalysisRepository } from '@libs/dao/swing-analysis/swing-analysis.repository';
-import { SwingAnalysisOutDto } from '@libs/dao/swing-analysis/dto/swing-analysis-out.dto';
-import { SwingAnalysis } from '@libs/dao/swing-analysis/swing-analysis.entity';
+import { SwingAnalysisRepository } from '@libs/dao/platform/swing-analysis/swing-analysis.repository';
+import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
+import { SwingAnalysis } from '@libs/dao/platform/swing-analysis/swing-analysis.entity';
 
 @Injectable()
 export class SwingAnalysisService {

@@ -1,9 +1,9 @@
-import { UsersRepository } from '@libs/dao/user/users.repository';
-import { User } from '@libs/dao/user/users.entity';
+import { UsersRepository } from '@libs/dao/platform/user/users.repository';
+import { User } from '@libs/dao/platform/user/users.entity';
 import { DATABASE_NAME } from '@libs/common/constants/database.constants';
-import { Auth } from '@libs/dao/auth/auth.entity';
+import { Auth } from '@libs/dao/platform/auth/auth.entity';
 import { EncryptUtil } from '@libs/common/utils/encrypt.util';
-import { AuthRepository } from '@libs/dao/auth/auth.repository';
+import { AuthRepository } from '@libs/dao/platform/auth/auth.repository';
 
 export class TestUserUtils {
   /**

@@ -2,15 +2,15 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseEntity } from '@libs/common/decorators/api-response-entity.decorator';
 import { GolfCourseService } from './golf-course.service';
-import { SearchNearByInDto } from '@libs/dao/golf-course/dto/search-nearby-in.dto';
-import { SearchPlaceInDto } from '@libs/dao/golf-course/dto/search-place-in.dto';
+import { SearchNearByInDto } from '@libs/dao/platform/golf-course/dto/search-nearby-in.dto';
+import { SearchPlaceInDto } from '@libs/dao/platform/golf-course/dto/search-place-in.dto';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
-import { SearchOutDto } from '@libs/dao/golf-course/dto/search-out.dto';
+import { SearchOutDto } from '@libs/dao/platform/golf-course/dto/search-out.dto';
 import { Auth } from '@libs/common/decorators/auth.decorator';
 import { CurrentUser } from '@libs/common/decorators/current-user.decorator';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
-import { AddGolfCourseInDto } from '@libs/dao/golf-course/dto/add-golf-course-in.dto';
-import { GolfCourseOutDto } from '@libs/dao/golf-course/dto/add-golf-course-out.dto';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
+import { AddGolfCourseInDto } from '@libs/dao/platform/golf-course/dto/add-golf-course-in.dto';
+import { GolfCourseOutDto } from '@libs/dao/platform/golf-course/dto/add-golf-course-out.dto';
 
 @Controller('golf-course')
 @ApiTags('Golf Course')

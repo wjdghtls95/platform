@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RedisUserFavoriteRepository } from '@libs/dao/redis/redis-user-favorite.repository';
-import { RedisUserGeoRepository } from '@libs/dao/redis/redis-user-geo.repository';
-import { FavoriteRepository } from '@libs/dao/favorite/favorite.repository';
+import { RedisUserFavoriteRepository } from '@libs/dao/platform/redis/redis-user-favorite.repository';
+import { RedisUserGeoRepository } from '@libs/dao/platform/redis/redis-user-geo.repository';
+import { FavoriteRepository } from '@libs/dao/platform/favorite/favorite.repository';
 
 @Injectable()
 export class CacheSyncProvider {
@@ -65,7 +65,7 @@ export class CacheSyncProvider {
         courseGroups.set(favorite.golfCourseId, {});
       }
 
-      courseGroups.get(favorite.golfCourseId)![favorite.placeId] = {
+      courseGroups.get(favorite.golfCourseId)[favorite.placeId] = {
         golfCourseId: favorite.golfCourseId,
         placeId: favorite.placeId,
         name: favorite.name,

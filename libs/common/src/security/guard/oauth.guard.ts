@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { OAuthUserDto } from '@libs/dao/auth/dto/oauth-login.dto';
+import { OAuthUserDto } from '@libs/dao/platform/auth/dto/oauth-login.dto';
 
 @Injectable()
 export class OAuthGuard extends AuthGuard('google') implements CanActivate {

@@ -4,17 +4,17 @@ import { TypeOrmHelper } from '@libs/common/databases/typeorm/typeorm.helper';
 import { TestTransactionUtils } from '../utils/test-transaction.utils';
 import { TestDataSourceUtils } from '../utils/test-data-source.utils';
 import { FavoriteService } from '../../src/favorite/favorite.service';
-import { FavoriteRepository } from '@libs/dao/favorite/favorite.repository';
+import { FavoriteRepository } from '@libs/dao/platform/favorite/favorite.repository';
 import { TestRedisDataSourceUtils } from '../utils/test-redis-data-source.utils';
 import { DATABASE_NAME } from '@libs/common/constants/database.constants';
-import { RedisUserFavoriteRepository } from '@libs/dao/redis/redis-user-favorite.repository';
-import { RedisUserGeoRepository } from '@libs/dao/redis/redis-user-geo.repository';
-import { AddFavoriteInDto } from '@libs/dao/favorite/dto/add-favorite-in.dto';
+import { RedisUserFavoriteRepository } from '@libs/dao/platform/redis/redis-user-favorite.repository';
+import { RedisUserGeoRepository } from '@libs/dao/platform/redis/redis-user-geo.repository';
+import { AddFavoriteInDto } from '@libs/dao/platform/favorite/dto/add-favorite-in.dto';
 import { TestUserUtils } from '../utils/test-user.utils';
-import { User } from '@libs/dao/user/users.entity';
-import { GolfCourseRepository } from '@libs/dao/golf-course/golf-course.repository';
+import { User } from '@libs/dao/platform/user/users.entity';
+import { GolfCourseRepository } from '@libs/dao/platform/golf-course/golf-course.repository';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
-import { GolfCourse } from '@libs/dao/golf-course/golf-course.entity';
+import { GolfCourse } from '@libs/dao/platform/golf-course/golf-course.entity';
 import { KAKAO_CATEGORY_CODE } from '@libs/common/constants/kakao.constants';
 
 describe('FavoriteService', () => {

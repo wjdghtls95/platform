@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ACCESS_TOKEN_SECRET_KEY } from '@libs/common/constants/token.constants';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

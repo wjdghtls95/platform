@@ -31,12 +31,22 @@ export const INTERNAL_ERROR_CODE = {
   FAVORITE_PLACE_SAVE_FAILED: 72, // 즐겨찾기 저장 실패
   FAVORITE_PLACE_DELETE_FAILED: 73, // 즐겨찾기 삭제 실패
 
+  // RESERVATION : 91 ~ 100
+  RESERVATION_INVALID_START_AT: 91, // 예약 시작시간 유효하지 않음
+  RESERVATION_NOT_FOUND: 92, // 예약을 찾지 못함
+  RESERVATION_STATUS_NOT_CONFIRMED: 93, // 확정되지 않은 예약
+
   // EXTERNAL : 101 ~ 120
   EXTERNAL_SERVICE_ERROR: 101, // 외부 API 호출 자체 실패
   EXTERNAL_LOCATION_LOOKUP_FAILED: 102, // 외부 API를 통한 위치 조회 실패
+  EXTERNAL_PLATFORM_CONFIRM_FAILED: 103, // 토큰 예약 실패
+  EXTERNAL_ICS_FETCH_FAILED: 104, // ics 텍스트 가져오기 실패
 
   // FILE_UPLOAD : 121 ~ 130
   FILE_UPLOAD_UNSUPPORTED_MEDIA_TYPE: 121, // 파일 업로드 타입이 다름
+
+  // REDIs: 801 ~
+  REDIS_INVALID_OR_EXPIRED_TOKEN: 801, // 스냅샷 유효하지 않은 토큰 or 만료된 토큰
 
   // DATABASE
   DB_UPDATE_FAILED: 9999, // db 업데이트 실패

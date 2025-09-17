@@ -9,9 +9,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { SwingAnalysisService } from './swing-analysis.service';
 import { ApiResponseEntity } from '@libs/common/decorators/api-response-entity.decorator';
 import { CurrentUser } from '@libs/common/decorators/current-user.decorator';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { SwingAnalysisOutDto } from '@libs/dao/swing-analysis/dto/swing-analysis-out.dto';
+import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
 import { ApiFileUpload } from '@libs/common/decorators/api-file-upload.decorator';
 

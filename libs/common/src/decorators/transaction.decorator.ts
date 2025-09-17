@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 /**
  * Transaction 데코레이터
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Transactional(...databaseNames: string[]): MethodDecorator {
   return (
     target: unknown,

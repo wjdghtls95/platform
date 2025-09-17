@@ -1,24 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UsersRepository } from '@libs/dao/user/users.repository';
-import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
+import { UsersRepository } from '@libs/dao/platform/user/users.repository';
+import { RegisterDto } from '@libs/dao/platform/auth/dto/register.dto';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
-import { User } from '@libs/dao/user/users.entity';
-import { RegisterOutDto } from '@libs/dao/auth/dto/register-out.dto';
+import { User } from '@libs/dao/platform/user/users.entity';
+import { RegisterOutDto } from '@libs/dao/platform/auth/dto/register-out.dto';
 import { Transactional } from '@libs/common/decorators/transaction.decorator';
-import { LoginInDto } from '@libs/dao/auth/dto/login-in.dto';
-import { LoginOutDto } from '@libs/dao/auth/dto/login-out.dto';
+import { LoginInDto } from '@libs/dao/platform/auth/dto/login-in.dto';
+import { LoginOutDto } from '@libs/dao/platform/auth/dto/login-out.dto';
 import { EncryptUtil } from '@libs/common/utils/encrypt.util';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
 import { REFRESH_TOKEN_UPDATE_TTL } from '@libs/common/constants/token.constants';
-import { OAuthTokenDto } from '@libs/dao/auth/dto/oauth-token.dto';
+import { OAuthTokenDto } from '@libs/dao/platform/auth/dto/oauth-token.dto';
 import { OAuthGoogleService } from './google/oauth-google.service';
 import { AccessToken, TokenUtil } from '@libs/common/utils/token.util';
-import { RefreshAccessTokenInDto } from '@libs/dao/auth/dto/refresh-access-token-in.dto';
-import { OAuthVerifyOutDto } from '@libs/dao/auth/dto/oauth-verify-out.dto';
-import { AuthRepository } from '@libs/dao/auth/auth.repository';
-import { Auth } from '@libs/dao/auth/auth.entity';
+import { RefreshAccessTokenInDto } from '@libs/dao/platform/auth/dto/refresh-access-token-in.dto';
+import { OAuthVerifyOutDto } from '@libs/dao/platform/auth/dto/oauth-verify-out.dto';
+import { AuthRepository } from '@libs/dao/platform/auth/auth.repository';
+import { Auth } from '@libs/dao/platform/auth/auth.entity';
 import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
 
 @Injectable()

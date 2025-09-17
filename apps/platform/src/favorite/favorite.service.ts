@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { FavoriteRepository } from '@libs/dao/favorite/favorite.repository';
-import { AddFavoriteInDto } from '@libs/dao/favorite/dto/add-favorite-in.dto';
-import { AddFavoriteOutDto } from '@libs/dao/favorite/dto/add-favorite-out.dto';
-import { Favorite } from '@libs/dao/favorite/favorite.entity';
-import { RedisUserFavoriteRepository } from '@libs/dao/redis/redis-user-favorite.repository';
-import { RedisUserGeoRepository } from '@libs/dao/redis/redis-user-geo.repository';
+import { FavoriteRepository } from '@libs/dao/platform/favorite/favorite.repository';
+import { AddFavoriteInDto } from '@libs/dao/platform/favorite/dto/add-favorite-in.dto';
+import { AddFavoriteOutDto } from '@libs/dao/platform/favorite/dto/add-favorite-out.dto';
+import { Favorite } from '@libs/dao/platform/favorite/favorite.entity';
+import { RedisUserFavoriteRepository } from '@libs/dao/platform/redis/redis-user-favorite.repository';
+import { RedisUserGeoRepository } from '@libs/dao/platform/redis/redis-user-geo.repository';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { Transactional } from '@libs/common/decorators/transaction.decorator';
-import { RedisGeoSearchDto } from '@libs/dao/redis/dto/redis-geo-search.dto';
-import { GolfCourseRepository } from '@libs/dao/golf-course/golf-course.repository';
+import { RedisGeoSearchDto } from '@libs/dao/platform/redis/dto/redis-geo-search.dto';
+import { GolfCourseRepository } from '@libs/dao/platform/golf-course/golf-course.repository';
 
 @Injectable()
 export class FavoriteService {

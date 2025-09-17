@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { KakaoProvider } from '@libs/common/external/kakao/kakao.provider';
-import { SearchPlaceInDto } from '@libs/dao/golf-course/dto/search-place-in.dto';
-import { SearchNearByInDto } from '@libs/dao/golf-course/dto/search-nearby-in.dto';
-import { SearchOutDto } from '@libs/dao/golf-course/dto/search-out.dto';
+import { SearchPlaceInDto } from '@libs/dao/platform/golf-course/dto/search-place-in.dto';
+import { SearchNearByInDto } from '@libs/dao/platform/golf-course/dto/search-nearby-in.dto';
+import { SearchOutDto } from '@libs/dao/platform/golf-course/dto/search-out.dto';
 import { KAKAO_CATEGORY_CODE } from '@libs/common/constants/kakao.constants';
-import { AddGolfCourseInDto } from '@libs/dao/golf-course/dto/add-golf-course-in.dto';
-import { GolfCourseOutDto } from '@libs/dao/golf-course/dto/add-golf-course-out.dto';
-import { GolfCourseRepository } from '@libs/dao/golf-course/golf-course.repository';
+import { AddGolfCourseInDto } from '@libs/dao/platform/golf-course/dto/add-golf-course-in.dto';
+import { GolfCourseOutDto } from '@libs/dao/platform/golf-course/dto/add-golf-course-out.dto';
+import { GolfCourseRepository } from '@libs/dao/platform/golf-course/golf-course.repository';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
-import { GolfCourse } from '@libs/dao/golf-course/golf-course.entity';
+import { GolfCourse } from '@libs/dao/platform/golf-course/golf-course.entity';
 
 @Injectable()
 export class GolfCourseService {

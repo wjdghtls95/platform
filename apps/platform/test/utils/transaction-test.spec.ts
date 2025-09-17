@@ -1,12 +1,12 @@
 import { TestingModule } from '@nestjs/testing';
-import { AuthRepository } from '@libs/dao/auth/auth.repository';
+import { AuthRepository } from '@libs/dao/platform/auth/auth.repository';
 import { AuthService } from '../../src/auth/auth.service';
 import { getTestModule } from './test.module';
 import { TypeOrmHelper } from '@libs/common/databases/typeorm/typeorm.helper';
 import { TestTransactionUtils } from './test-transaction.utils';
 import { TestDataSourceUtils } from './test-data-source.utils';
-import { UsersRepository } from '@libs/dao/user/users.repository';
-import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
+import { UsersRepository } from '@libs/dao/platform/user/users.repository';
+import { RegisterDto } from '@libs/dao/platform/auth/dto/register.dto';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
 import { TestRedisDataSourceUtils } from './test-redis-data-source.utils';

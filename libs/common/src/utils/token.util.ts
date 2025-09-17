@@ -54,4 +54,13 @@ export class TokenUtil {
 
     return ttl;
   }
+
+  /**
+   * 예약 토큰 생성 (불투명 토큰 Opaque Token)
+   */
+  static generateOpaqueToken(prefix: string): string {
+    return `${prefix}_${Math.random().toString(36).slice(2, 10)}${Math.random()
+      .toString(36)
+      .slice(2, 6)}`;
+  }
 }

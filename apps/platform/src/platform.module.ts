@@ -4,8 +4,8 @@ import { ClsModule } from 'nestjs-cls';
 import { DefaultModule } from './default/default.module';
 import { TypeOrmExModule } from '@libs/common/databases/typeorm/typeorm-ex.module';
 import platformDatabaseConfig from './config/platform-database.config';
-import { UsersModule } from '@libs/dao/user/users.module';
-import { AuthModule } from '@libs/dao/auth/auth.module';
+import { UsersModule } from '@libs/dao/platform/user/users.module';
+import { AuthModule } from '@libs/dao/platform/auth/auth.module';
 import { AuthController } from './auth/auth.controller';
 import { UsersController } from './users/users.controller';
 import { AuthService } from './auth/auth.service';
@@ -16,19 +16,25 @@ import { TransactionInterceptor } from '@libs/common/interceptor/transaction.int
 import { SecurityModule } from '@libs/common/security/security.module';
 import { OAuthGoogleService } from './auth/google/oauth-google.service';
 import { OAuth2Client } from 'google-auth-library';
-import { GolfCourseModule } from '@libs/dao/golf-course/golf-course.module';
+import { GolfCourseModule } from '@libs/dao/platform/golf-course/golf-course.module';
 import { GolfCourseController } from './golf-course/golf-course.controller';
 import { GolfCourseService } from './golf-course/golf-course.service';
 import { KakaoModule } from '@libs/common/external/kakao/kakao.module';
 import { IpLocationModule } from '@libs/common/external/ip/ip-location.module';
 import { FavoriteService } from './favorite/favorite.service';
-import { FavoriteModule } from '@libs/dao/favorite/favorite.module';
+import { FavoriteModule } from '@libs/dao/platform/favorite/favorite.module';
 import { FavoriteController } from './favorite/favorite.controller';
-import { RedisModule } from '@libs/dao/redis/redis.module';
+import { RedisModule } from '@libs/dao/platform/redis/redis.module';
 import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
 import { SwingAnalysisController } from './swing-analysis/swing-analysis.controller';
-import { SwingAnalysisModule } from '@libs/dao/swing-analysis/swing-analysis.module';
+import { SwingAnalysisModule } from '@libs/dao/platform/swing-analysis/swing-analysis.module';
 import { SwingAnalysisService } from './swing-analysis/swing-analysis.service';
+import { ReservationModule } from '@libs/dao/platform/reservation/reservation.module';
+import { ReservationController } from './reservation/reservation.controller';
+import { ReservationService } from './reservation/reservation.service';
+import { CalendarController } from './calendar/calendar.controller';
+import { CalendarService } from './calendar/calendar.service';
+import { CalendarProvider } from '@libs/common/provider/calendar/calendar.provider';
 
 @Module({
   imports: [
@@ -64,6 +70,7 @@ import { SwingAnalysisService } from './swing-analysis/swing-analysis.service';
     GolfCourseModule,
     FavoriteModule,
     SwingAnalysisModule,
+    ReservationModule,
   ],
   controllers: [
     // domain
@@ -72,6 +79,8 @@ import { SwingAnalysisService } from './swing-analysis/swing-analysis.service';
     GolfCourseController,
     FavoriteController,
     SwingAnalysisController,
+    ReservationController,
+    CalendarController,
   ],
   providers: [
     { provide: APP_PIPE, useValue: new ValidationPipe({ transform: true }) },
@@ -88,9 +97,12 @@ import { SwingAnalysisService } from './swing-analysis/swing-analysis.service';
     GolfCourseService,
     FavoriteService,
     SwingAnalysisService,
+    ReservationService,
+    CalendarService,
 
     // provider
     CacheSyncProvider,
+    CalendarProvider,
   ],
 })
 export class PlatformModule {}

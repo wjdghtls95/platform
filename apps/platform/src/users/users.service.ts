@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IpLocationProvider } from '@libs/common/external/ip/ip-location.provider';
-import { UserLocationOutDto } from '@libs/dao/user/dto/user-location-out.dto';
+import { UserLocationOutDto } from '@libs/dao/platform/user/dto/user-location-out.dto';
 
 @Injectable()
 export class UsersService {

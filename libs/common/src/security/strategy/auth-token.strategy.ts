@@ -1,4 +1,4 @@
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import Strategy from 'passport-headerapikey';

@@ -1,6 +1,6 @@
 import { TestingModule } from '@nestjs/testing';
-import { RedisUserFavoriteRepository } from '@libs/dao/redis/redis-user-favorite.repository';
-import { RedisUserGeoRepository } from '@libs/dao/redis/redis-user-geo.repository';
+import { RedisUserFavoriteRepository } from '@libs/dao/platform/redis/redis-user-favorite.repository';
+import { RedisUserGeoRepository } from '@libs/dao/platform/redis/redis-user-geo.repository';
 import { AbstractRedisRepository } from '@libs/common/databases/redis/abstract-redis.repository';
 import { RedisFactory } from '@libs/common/databases/redis/redis.factory';
 

@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
 
 export const CurrentUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): AuthPayload => {

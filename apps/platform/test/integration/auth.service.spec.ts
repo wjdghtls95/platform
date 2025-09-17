@@ -5,11 +5,11 @@ import { TypeOrmHelper } from '@libs/common/databases/typeorm/typeorm.helper';
 import { TestTransactionUtils } from '../utils/test-transaction.utils';
 import { TestDataSourceUtils } from '../utils/test-data-source.utils';
 import { AUTH_TYPE } from '@libs/common/constants/auth.constants';
-import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
+import { RegisterDto } from '@libs/dao/platform/auth/dto/register.dto';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
-import { UsersRepository } from '@libs/dao/user/users.repository';
-import { LoginInDto } from '@libs/dao/auth/dto/login-in.dto';
-import { AuthRepository } from '@libs/dao/auth/auth.repository';
+import { UsersRepository } from '@libs/dao/platform/user/users.repository';
+import { LoginInDto } from '@libs/dao/platform/auth/dto/login-in.dto';
+import { AuthRepository } from '@libs/dao/platform/auth/auth.repository';
 import { TestRedisDataSourceUtils } from '../utils/test-redis-data-source.utils';
 
 describe('AuthService', () => {

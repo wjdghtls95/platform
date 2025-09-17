@@ -3,12 +3,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth } from '@libs/common/decorators/auth.decorator';
 import { ApiResponseEntity } from '@libs/common/decorators/api-response-entity.decorator';
 import { CurrentUser } from '@libs/common/decorators/current-user.decorator';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
-import { AddFavoriteInDto } from '@libs/dao/favorite/dto/add-favorite-in.dto';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
+import { AddFavoriteInDto } from '@libs/dao/platform/favorite/dto/add-favorite-in.dto';
 import { FavoriteService } from './favorite.service';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
-import { AddFavoriteOutDto } from '@libs/dao/favorite/dto/add-favorite-out.dto';
-import { RedisGeoSearchDto } from '@libs/dao/redis/dto/redis-geo-search.dto';
+import { AddFavoriteOutDto } from '@libs/dao/platform/favorite/dto/add-favorite-out.dto';
+import { RedisGeoSearchDto } from '@libs/dao/platform/redis/dto/redis-geo-search.dto';
 
 @Controller('favorite')
 @ApiTags('Favorite')

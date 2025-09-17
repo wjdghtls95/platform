@@ -25,7 +25,7 @@ export class FileUploadHelper {
     return diskStorage({
       destination: this.uploadDir,
       filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
+        // const ext = path.extname(file.originalname);
         const filename = `${Date.now()}-${file.originalname}`;
         cb(null, filename);
       },

@@ -11,17 +11,17 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { ApiResponseEntity } from '@libs/common/decorators/api-response-entity.decorator';
-import { RegisterDto } from '@libs/dao/auth/dto/register.dto';
+import { RegisterDto } from '@libs/dao/platform/auth/dto/register.dto';
 import { ResponseEntity } from '@libs/common/networks/response-entity';
-import { LoginInDto } from '@libs/dao/auth/dto/login-in.dto';
-import { RegisterOutDto } from '@libs/dao/auth/dto/register-out.dto';
+import { LoginInDto } from '@libs/dao/platform/auth/dto/login-in.dto';
+import { RegisterOutDto } from '@libs/dao/platform/auth/dto/register-out.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { OAuthTokenDto } from '@libs/dao/auth/dto/oauth-token.dto';
-import { RefreshAccessTokenInDto } from '@libs/dao/auth/dto/refresh-access-token-in.dto';
-import { OAuthVerifyOutDto } from '@libs/dao/auth/dto/oauth-verify-out.dto';
-import { LoginOutDto } from '@libs/dao/auth/dto/login-out.dto';
+import { OAuthTokenDto } from '@libs/dao/platform/auth/dto/oauth-token.dto';
+import { RefreshAccessTokenInDto } from '@libs/dao/platform/auth/dto/refresh-access-token-in.dto';
+import { OAuthVerifyOutDto } from '@libs/dao/platform/auth/dto/oauth-verify-out.dto';
+import { LoginOutDto } from '@libs/dao/platform/auth/dto/login-out.dto';
 import { Auth } from '@libs/common/decorators/auth.decorator';
-import { AuthPayload } from '@libs/dao/auth/interfaces/auth-payload.interface';
+import { AuthPayload } from '@libs/dao/platform/auth/interfaces/auth-payload.interface';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -48,19 +48,15 @@ export class AuthController {
     return ResponseEntity.ok().body(loginOutDto);
   }
 
-  @Get('/google')
-  @UseGuards(AuthGuard('google'))
-  loginPage(): void {
-    return;
-  }
+  @Delete('/logout')
+  @Auth()
+  @ApiResponseEntity({ summary: '로그아웃' })
+  async logout(@Req() req: Request): Promise<ResponseEntity<unknown>> {
+    const user = (req as any).user as AuthPayload;
 
-  @Get('/google/callback')
-  async callback(
-    @Query('code') code: string,
-  ): Promise<ResponseEntity<OAuthTokenDto>> {
-    const oauthTokenDto = await this.authService.googleLogin(code);
+    await this.authService.logout(user.userId);
 
-    return ResponseEntity.ok().body(oauthTokenDto);
+    return ResponseEntity.ok().build(); // 응답 body 없이 200 반환
   }
 
   @Post('/token/refresh')
@@ -76,14 +72,18 @@ export class AuthController {
     return ResponseEntity.ok().body(oauthVerifyOutDto);
   }
 
-  @Delete('/logout')
-  @Auth()
-  @ApiResponseEntity({ summary: '로그아웃' })
-  async logout(@Req() req: Request): Promise<ResponseEntity<unknown>> {
-    const user = (req as any).user as AuthPayload;
+  @Get('/google')
+  @UseGuards(AuthGuard('google'))
+  loginPage(): void {
+    return;
+  }
 
-    await this.authService.logout(user.userId);
+  @Get('/google/callback')
+  async callback(
+    @Query('code') code: string,
+  ): Promise<ResponseEntity<OAuthTokenDto>> {
+    const oauthTokenDto = await this.authService.googleLogin(code);
 
-    return ResponseEntity.ok().build(); // 응답 body 없이 200 반환
+    return ResponseEntity.ok().body(oauthTokenDto);
   }
 }
