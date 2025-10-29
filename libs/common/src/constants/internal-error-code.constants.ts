@@ -45,7 +45,10 @@ export const INTERNAL_ERROR_CODE = {
   // FILE_UPLOAD : 121 ~ 130
   FILE_UPLOAD_UNSUPPORTED_MEDIA_TYPE: 121, // 파일 업로드 타입이 다름
 
-  // REDIs: 801 ~
+  // LLM : 131 ~ 140
+  LLM_API_KEY_INVALID: 131, // LLM API키가 유효하지않음
+
+  // REDIS: 801 ~
   REDIS_INVALID_OR_EXPIRED_TOKEN: 801, // 스냅샷 유효하지 않은 토큰 or 만료된 토큰
 
   // DATABASE

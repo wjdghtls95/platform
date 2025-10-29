@@ -1,13 +1,23 @@
 import { Redis } from 'ioredis';
 import { ChainableCommander } from 'ioredis/built/utils/RedisCommander';
 import { RedisFactory } from '@libs/common/databases/redis/redis.factory';
+import { ConfigService } from '@nestjs/config';
 
 export abstract class AbstractRedisRepository {
   protected redis: Redis;
-  protected readonly dbNumber: number;
 
-  createRedisClient(): void {
-    this.redis = RedisFactory.createRedisClient(this.dbNumber);
+  createRedisClient(
+    configService: ConfigService,
+    configKey: string,
+    dbNumber: number,
+    appIdentifier: string,
+  ): void {
+    this.redis = RedisFactory.createRedisClient(
+      configService,
+      configKey,
+      dbNumber,
+      appIdentifier,
+    );
   }
 
   async pipeline(): Promise<ChainableCommander> {

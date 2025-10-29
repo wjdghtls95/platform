@@ -24,7 +24,7 @@ import { IpLocationModule } from '@libs/common/external/ip/ip-location.module';
 import { FavoriteService } from './favorite/favorite.service';
 import { FavoriteModule } from '@libs/dao/platform/favorite/favorite.module';
 import { FavoriteController } from './favorite/favorite.controller';
-import { RedisModule } from '@libs/dao/platform/redis/redis.module';
+import { RedisRepositoryModule } from '@libs/dao/platform/redis/redis-repository.module';
 import { CacheSyncProvider } from '@libs/common/provider/cache-sync/cache-sync.provider';
 import { SwingAnalysisController } from './swing-analysis/swing-analysis.controller';
 import { SwingAnalysisModule } from '@libs/dao/platform/swing-analysis/swing-analysis.module';
@@ -51,8 +51,8 @@ import { CalendarProvider } from '@libs/common/provider/calendar/calendar.provid
       useFactory: async (config) => config,
     }),
 
-    // Redis Module
-    RedisModule,
+    // Platform Redis Register
+    RedisRepositoryModule,
 
     // health check
     DefaultModule,

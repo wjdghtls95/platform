@@ -81,6 +81,23 @@ export class TimeUtil {
   }
 
   /**
+   * 밀리초를 읽기 쉬운 문자열로 포맷팅
+   */
+  static format(ms: number): string {
+    if (ms < 1000) {
+      return `${ms}ms`;
+    }
+    return `${(ms / 1000).toFixed(2)}s`;
+  }
+
+  /**
+   * Date 간 시 차이 (밀리초)
+   */
+  static diff(startTime: number, endTime?: number): number {
+    return (endTime || Date.now()) - startTime;
+  }
+
+  /**
    * Date 간 시 차이
    */
   static diffHours(date1: Date, date2: Date): number {

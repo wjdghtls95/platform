@@ -45,6 +45,15 @@
           "tsConfigPath": "libs/dao/tsconfig.lib.json"
         }
       }
+    },
+    "llm-gateway": {
+      "type": "application",
+      "root": "apps/llm-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/llm-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/llm-gateway/tsconfig.app.json"
+      }
     }
   }
 }

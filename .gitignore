@@ -42,3 +42,6 @@ config/.*.test.env
 
 # directory
 uploads
+
+# eslint
+.eslintcache

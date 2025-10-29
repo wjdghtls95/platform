@@ -1,18 +1,51 @@
-import { Redis } from 'ioredis';
-import platformRedisConfig from '../../../../../apps/platform/src/config/platform-redis.config';
+import { Logger } from '@nestjs/common';
+import { Redis, RedisOptions } from 'ioredis';
+import { ConfigService } from '@nestjs/config';
 
 const customRedisClient: Record<string, Redis> = {};
+const logger = new Logger('RedisFactory');
 
 export class RedisFactory {
   static getAllRedisClient(): Redis[] {
     return Object.values(customRedisClient);
   }
 
-  static createRedisClient(dbNumber = 0): Redis {
-    return (customRedisClient[dbNumber] ??= new Redis({
-      ...platformRedisConfig()[dbNumber],
+  static createRedisClient(
+    configService: ConfigService,
+    configKey: string,
+    dbNumber = 0 as number,
+    appIdentifier: string,
+  ): Redis {
+    const cacheKey = `${appIdentifier}:${dbNumber}`;
+
+    if (customRedisClient[cacheKey]) {
+      return customRedisClient[cacheKey];
+    }
+
+    const configMap =
+      configService.get<Record<number, RedisOptions>>(configKey);
+
+    if (!configMap) {
+      const error = `Redis config key not found in ConfigService: ${configKey}`;
+      logger.error(error);
+      throw new Error(error);
+    }
+
+    const config = configMap[dbNumber];
+
+    if (!config) {
+      const error = `Redis config not found: ${appIdentifier} DB${dbNumber} (Key: ${configKey})`;
+      logger.error(error);
+      throw new Error(error);
+    }
+
+    customRedisClient[cacheKey] = new Redis({
+      ...config,
       role: 'master',
-    }));
+    });
+
+    logger.log(`✅ Redis client created: ${cacheKey}`);
+    return customRedisClient[cacheKey];
   }
 
   /**
@@ -34,13 +67,16 @@ export class RedisFactory {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const handles = process._getActiveHandles();
-    console.log('🧪 active handles:', handles.length);
+    // test 환경에서만
+    if (process.env.NODE_ENV === 'production') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const handles = process._getActiveHandles();
+      console.log('🧪 active handles:', handles.length);
 
-    handles.forEach((handle, i) => {
-      console.log(`🔍 handle[${i}]:`, handle.constructor?.name);
-    });
+      handles.forEach((handle, i) => {
+        console.log(`🔍 handle[${i}]:`, handle.constructor?.name);
+      });
+    }
   }
 }

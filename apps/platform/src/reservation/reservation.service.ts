@@ -71,6 +71,7 @@ export class ReservationService {
       partySize: partySize,
       provider: provider,
     };
+
     await this.redisReservationRepository.setSnapshot(
       reservationToken,
       snapshot,

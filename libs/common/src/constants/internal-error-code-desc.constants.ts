@@ -47,6 +47,9 @@ export const INTERNAL_ERROR_CODE_DESC = {
   // FILE_UPLOAD
   [e.FILE_UPLOAD_UNSUPPORTED_MEDIA_TYPE]: '파일 업로드 타입이 다름',
 
+  // LLM
+  [e.LLM_API_KEY_INVALID]: 'LLM API키가 유효하지않음',
+
   // REDIS
   [e.REDIS_INVALID_OR_EXPIRED_TOKEN]:
     '스냅샷 유효하지 않은 토큰 or 만료된 토큰',

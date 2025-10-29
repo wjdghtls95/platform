@@ -1,13 +1,14 @@
 import { AbstractRedisRepository } from '@libs/common/databases/redis/abstract-redis.repository';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { REDIS_KEY } from '@libs/common/utils/redis-key.util';
 import { RedisGeoSearchDto } from '@libs/dao/platform/redis/dto/redis-geo-search.dto';
+import { Redis } from 'ioredis';
+import { PLATFORM_REDIS_CLIENT } from '@libs/dao/platform/redis/redis-repository.module';
 
 @Injectable()
 export class RedisUserGeoRepository extends AbstractRedisRepository {
-  constructor() {
+  constructor(@Inject(PLATFORM_REDIS_CLIENT) protected readonly redis: Redis) {
     super();
-    this.createRedisClient();
   }
 
   /**
