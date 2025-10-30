@@ -1,9 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as FormData from 'form-data';
 import { SwingAnalysisProvider } from '@libs/common/external/swing-analysis/swing-analysis.provider';
 import { SwingAnalysisRepository } from '@libs/dao/platform/swing-analysis/swing-analysis.repository';
 import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
 import { SwingAnalysis } from '@libs/dao/platform/swing-analysis/swing-analysis.entity';
+import { AbstractHttpService } from '@libs/common/networks/abstract-http-service';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class SwingAnalysisService {
@@ -55,6 +57,44 @@ export class SwingAnalysisService {
       feedback: result.feedback,
       landmarkCount: result.landmarkCount,
     });
+  }
+
+  /**
+   * LLM 게이트웨이 호출 테스트용 메소드
+   */
+  async testLlmGateway(): Promise<any> {
+    if (process.env.NODE_ENV !== 'test') {
+      throw new Error('Invalid Environment');
+    }
+
+    // apps/llm-gateway/src/chat/dto/chat-out.dto.ts 참고
+    const chatDto = {
+      provider: 'openai',
+      model: 'gpt-4o-mini',
+      analysisData: {
+        backswingAngle: 0,
+        downswingAngle: 0,
+        impactAngle: 0,
+        errors: [],
+      }, // 필요시 스윙 분석 데이터
+      language: 'ko',
+    };
+
+    try {
+      // 게이트웨이의 /chat 엔드포인트 호출
+      // (baseURL과 X-Internal-Api-Key 헤더는 platform.module.ts에서 자동 설정됨)
+      const result = this.swingAnalysisProvider.post({
+        method: 'chat',
+        data: chatDto,
+      });
+
+      // 게이트웨이로부터 받은 응답 (OpenAI의 답변)
+      return result;
+    } catch (e) {
+      Logger.error('LLM Gateway 호출 실패:', e.response?.data || e.message);
+
+      throw e;
+    }
   }
 
   /**

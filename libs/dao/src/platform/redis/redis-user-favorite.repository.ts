@@ -3,7 +3,7 @@ import { AbstractRedisRepository } from '@libs/common/databases/redis/abstract-r
 import { REDIS_KEY } from '@libs/common/utils/redis-key.util';
 import { RedisAddFavoriteDto } from '@libs/dao/platform/redis/dto/redis-add-favorite.dto';
 import { Redis } from 'ioredis';
-import { PLATFORM_REDIS_CLIENT } from '@libs/dao/platform/redis/redis-repository.module';
+import { PLATFORM_REDIS_CLIENT } from '@libs/dao/platform/redis/constants/redis.constants';
 
 @Injectable()
 export class RedisUserFavoriteRepository extends AbstractRedisRepository {

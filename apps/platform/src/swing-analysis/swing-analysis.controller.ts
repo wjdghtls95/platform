@@ -1,6 +1,7 @@
 import { Auth } from '@libs/common/decorators/auth.decorator';
 import {
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -15,8 +16,8 @@ import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing
 import { ResponseEntity } from '@libs/common/networks/response-entity';
 import { ApiFileUpload } from '@libs/common/decorators/api-file-upload.decorator';
 
+@ApiTags('Golf Swing Analysis')
 @Controller('swing-analysis')
-@ApiTags('Swing Analysis')
 @Auth()
 export class SwingAnalysisController {
   constructor(private readonly swingAnalysisService: SwingAnalysisService) {}
@@ -35,5 +36,12 @@ export class SwingAnalysisController {
       await this.swingAnalysisService.uploadLocalSwingFile(file, user.userId);
 
     return ResponseEntity.ok().body(swingAnalysisOutDto);
+  }
+
+  @Get('test-gateway')
+  @ApiResponseEntity({ summary: 'LLM 게이트웨이 호출 테스트' })
+  async testLlmGateway() {
+    const result = await this.swingAnalysisService.testLlmGateway();
+    return ResponseEntity.ok(result);
   }
 }

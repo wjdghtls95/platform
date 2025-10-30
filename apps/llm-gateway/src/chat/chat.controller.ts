@@ -14,7 +14,7 @@ import { UsageLoggerInterceptor } from '../cost/usage-logger.interceptor';
 import { ApiKeyAuth } from '@libs/common/decorators/api-key-auth.decorator';
 
 @ApiTags('LLM Gateway')
-@Controller('llm-gateway')
+@Controller()
 @ApiKeyAuth()
 @UseInterceptors(UsageLoggerInterceptor) // 📊 컨트롤러 전체에 비용 로깅 인터셉터 적용
 export class ChatController {
@@ -33,9 +33,9 @@ export class ChatController {
     required: true,
   })
   async chat(
-    @Body() chatRequestDto: ChatOutDto, // 요청 Body의 유효성 검사(ValidationPipe)
+    @Body() chatOutDto: ChatOutDto, // 요청 Body의 유효성 검사(ValidationPipe)
   ): Promise<ChatInDto> {
     // 모든 로직은 ChatService에 위임
-    return this.chatService.processChat(chatRequestDto);
+    return await this.chatService.processChat(chatOutDto);
   }
 }

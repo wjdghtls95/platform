@@ -1,14 +1,10 @@
-import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { DynamicModule, Module, Provider, Global } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { RedisFactory } from './redis.factory';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 /**
  * Redis DB 번호에 따른 동적 DI 토큰 생성
- * @param appIdentifier - app 식별자 (예: 'platform', 'llm-gateway')
- * @param dbNumber - Redis DB 번호 (
- * @returns DI 토큰 문자열
- * @example getRedisToken('platform', 0) // 'REDIS_CLIENT_platform_0'
  */
 export const getRedisToken = (
   appIdentifier: string,
@@ -18,75 +14,101 @@ export const getRedisToken = (
 };
 
 /**
- * RedisModuleOptions 인터페이스
+ * Redis 모듈 설정 옵션
  */
 export interface RedisModuleOptions {
-  appIdentifier: string; // platform, llm-gateway
-  configKey: string; // platform-redis, llm-gateway-redis
+  appIdentifier: string;
+  configKey: string;
   dbNumber: number;
 }
 
 /**
- * Redis Core Module (Dynamic Module)
+ * ❗️ [추가됨] forRootAsync에서 사용할 비동기 옵션 인터페이스
  */
+export interface RedisCoreModuleAsyncOptions {
+  imports?: any[];
+  // useFactory는 ConfigService 등을 주입받아 RedisModuleOptions를 반환
+  useFactory: (
+    ...args: any[]
+  ) => Promise<RedisModuleOptions> | RedisModuleOptions;
+  inject?: any[];
+  /** ❗️ 이 모듈이 제공할 "DI 토큰"을 명시적으로 받음 */
+  token: string;
+}
+
+@Global() // ❗️ 전역 모듈로 변경
 @Module({})
 export class RedisCoreModule {
   /**
-   * 전역 등록: 애플리케이션 전체에서 사용할 Redis 설정
+   * 동기 방식 등록
    */
   static forRoot(options: RedisModuleOptions): DynamicModule {
-    const providers = this.createRedisProviders(options);
-
-    return {
-      module: RedisCoreModule,
-      imports: [ConfigModule],
-      global: true,
-      providers,
-      exports: providers.map((p) => (p as any).provide),
-    };
-  }
-
-  /**
-   * 지역 등록: 특정 모듈에서만 사용할 Redis 설정
-   */
-  static register(options: RedisModuleOptions): DynamicModule {
-    const providers = this.createRedisProviders(options);
-
-    return {
-      module: RedisCoreModule,
-      imports: [ConfigModule],
-      providers,
-      exports: providers.map((p) => (p as any).provide),
-    };
-  }
-
-  /**
-   * Redis Provider 동적 생성
-   * 환경변수에서 DB 번호를 읽어 자동으로 Provider 생성
-   */
-  private static createRedisProviders(options: RedisModuleOptions): Provider[] {
-    const { appIdentifier, configKey, dbNumber } = options;
-
-    return [
+    const providers = [
       {
-        provide: getRedisToken(appIdentifier, dbNumber),
-
+        provide: getRedisToken(options.appIdentifier, options.dbNumber),
         useFactory: (configService: ConfigService): Redis => {
+          // ❗️ 동기 방식도 ConfigService를 사용하도록 수정
           return RedisFactory.createRedisClient(
-            configService, // 1. ConfigService 전달
-            configKey, // 2. 'llm-gateway-redis' 같은 키 전달
-            dbNumber, // 3. DB 번호 전달
-            appIdentifier, // 4. 'llm-gateway' 같은 식별자 전달
+            configService,
+            options.configKey,
+            options.dbNumber,
+            options.appIdentifier,
           );
         },
-        inject: [ConfigService], // 의존성 주입
+        inject: [ConfigService],
       },
     ];
+
+    return {
+      module: RedisCoreModule,
+      imports: [ConfigModule], // ❗️ ConfigModule 임포트
+      providers: providers,
+      exports: providers.map((p) => (p as any).provide),
+    };
   }
 
   /**
-   * 애플리케이션 종료 시 Redis 연결 정리
+   * ❗️ [추가됨] 비동기 방식 등록 (순환 참조 해결용)
    */
+  static forRootAsync(options: RedisCoreModuleAsyncOptions): DynamicModule {
+    const asyncProvider: Provider = {
+      // ❗️ 호출부(RedisRepositoryModule)에서 지정한 "DI 토큰"을 사용
+      provide: options.token,
+      useFactory: async (
+        ...args: any[] // ❗️ inject된 서비스들 (예: ConfigService)
+      ): Promise<Redis> => {
+        // 1. .env 로드가 완료된 ConfigService를 사용하여 옵션을 가져옴
+        const moduleOptions = await options.useFactory(...args);
+        const { appIdentifier, configKey, dbNumber } = moduleOptions;
+
+        // 2. ConfigService를 RedisFactory로 전달
+        const configService = args.find((arg) => arg instanceof ConfigService);
+        if (!configService) {
+          // ❗️ ConfigService가 inject 배열에 없으면 에러 발생
+          throw new Error(
+            'ConfigService must be injected in forRootAsync options.inject',
+          );
+        }
+
+        return RedisFactory.createRedisClient(
+          configService,
+          configKey,
+          dbNumber,
+          appIdentifier,
+        );
+      },
+      // ❗️ ConfigService가 기본으로 포함되도록 하거나, options.inject를 사용
+      inject: options.inject || [ConfigService],
+    };
+
+    return {
+      module: RedisCoreModule,
+      imports: options.imports || [ConfigModule], // ❗️ ConfigModule 임포트
+      providers: [asyncProvider],
+      exports: [asyncProvider.provide],
+    };
+  }
+
   async onApplicationShutdown(): Promise<void> {
     await RedisFactory.logRedisClientStatus();
   }

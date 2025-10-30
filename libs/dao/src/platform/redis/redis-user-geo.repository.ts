@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { REDIS_KEY } from '@libs/common/utils/redis-key.util';
 import { RedisGeoSearchDto } from '@libs/dao/platform/redis/dto/redis-geo-search.dto';
 import { Redis } from 'ioredis';
-import { PLATFORM_REDIS_CLIENT } from '@libs/dao/platform/redis/redis-repository.module';
+import { PLATFORM_REDIS_CLIENT } from '@libs/dao/platform/redis/constants/redis.constants';
 
 @Injectable()
 export class RedisUserGeoRepository extends AbstractRedisRepository {

@@ -5,6 +5,10 @@ import { HttpService } from '@nestjs/axios';
 @Injectable()
 export class SwingAnalysisProvider extends AbstractHttpService {
   constructor(protected readonly httpService: HttpService) {
-    super(httpService, `${process.env.SWING_ANALYSIS_URL}`);
+    super(httpService, `${process.env.LLM_GATEWAY_URL}`);
+
+    this.headers = this.headers = {
+      'x-internal-api-key': `${process.env.LLM_GATEWAY_API_KEY}`,
+    };
   }
 }

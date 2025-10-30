@@ -16,27 +16,46 @@ import { Request } from 'express';
 @Injectable()
 export class InternalAuthGuard implements CanActivate {
   private readonly logger = new Logger(InternalAuthGuard.name);
-  private readonly validKey: string;
+  private readonly validKeys: Set<string>;
 
-  constructor(private configService: ConfigService) {
-    this.validKey = this.configService.get<string>('INTERNAL_API_KEY');
-    if (!this.validKey) {
+  constructor(private readonly configService: ConfigService) {
+    this.validKeys = new Set();
+
+    // .env에서 개별 키를 모두 읽어와 Set에 추가합니다.
+    const platformKey = this.configService.get<string>(
+      'INTERNAL_API_KEY_PLATFORM',
+    );
+
+    const analyzerKey = this.configService.get<string>(
+      'INTERNAL_API_KEY_SWING_ANALYZER',
+    );
+
+    // 값이 있는 키만 Set에 추가 (undefined 방지)
+    if (platformKey) {
+      this.validKeys.add(platformKey);
+    }
+
+    if (analyzerKey) {
+      this.validKeys.add(analyzerKey);
+    }
+
+    if (this.validKeys.size === 0) {
       this.logger.error('INTERNAL_API_KEY가 .env 파일에 설정되지 않았습니다.');
       throw new Error('INTERNAL_API_KEY가 설정되지 않았습니다.');
     }
   }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const apiKey = request.headers['x-internal-api-key'] as string;
 
-    // 헤더의 키와 .env의 키를 비교
-    if (!apiKey || apiKey !== this.validKey) {
-      this.logger.warn(
-        `비인가 접근 시도: ${request.ip}, Key: ${apiKey?.substring(0, 5)}...`,
-      );
-      // 키가 없거나 일치하지 않으면 401 Unauthorized 에러 발생
-      throw new UnauthorizedException('유효하지 않은 내부 API 키입니다.');
+    if (!apiKey) {
+      throw new UnauthorizedException('API key is missing');
+    }
+
+    // Set에 키가 존재하는지 확인
+    if (!this.validKeys.has(apiKey)) {
+      throw new UnauthorizedException('Invalid API key');
     }
 
     // 인증 성공
