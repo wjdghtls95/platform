@@ -47,6 +47,7 @@ export const INTERNAL_ERROR_CODE = {
 
   // LLM : 131 ~ 140
   LLM_API_KEY_INVALID: 131, // LLM API키가 유효하지않음
+  LLM_HTTP_ERROR: 132, // LLM 게이트 웨이 통신 실패
 
   // REDIS: 801 ~
   REDIS_INVALID_OR_EXPIRED_TOKEN: 801, // 스냅샷 유효하지 않은 토큰 or 만료된 토큰

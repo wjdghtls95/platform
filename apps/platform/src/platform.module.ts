@@ -58,7 +58,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     HttpModule.registerAsync({
       imports: [ConfigModule], // ConfigModule 사용
       useFactory: async (configService: ConfigService) => ({
-        baseURL: configService.get<string>('LLM_GATEWAY_URL'), // 기본 URL 설정 (http://localhost:3030)
+        baseURL: configService.get<string>('SWING_ANALYZER_URL'), // 기본 URL 설정 (http://localhost:3030)
         headers: {
           // 모든 요청에 API 키 자동 주입
           'X-Internal-Api-Key': configService.get<string>(

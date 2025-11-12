@@ -17,7 +17,7 @@ import { ResponseEntity } from '@libs/common/networks/response-entity';
 import { ApiFileUpload } from '@libs/common/decorators/api-file-upload.decorator';
 
 @ApiTags('Golf Swing Analysis')
-@Controller('swing-analysis')
+@Controller('llm-gateway')
 @Auth()
 export class SwingAnalysisController {
   constructor(private readonly swingAnalysisService: SwingAnalysisService) {}
@@ -40,8 +40,8 @@ export class SwingAnalysisController {
 
   @Get('test-gateway')
   @ApiResponseEntity({ summary: 'LLM 게이트웨이 호출 테스트' })
-  async testLlmGateway() {
-    const result = await this.swingAnalysisService.testLlmGateway();
+  async testLLmGateway() {
+    const result = await this.swingAnalysisService.testLLmGateway();
     return ResponseEntity.ok(result);
   }
 }

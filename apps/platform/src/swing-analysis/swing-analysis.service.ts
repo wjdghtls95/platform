@@ -1,11 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as FormData from 'form-data';
-import { SwingAnalysisProvider } from '@libs/common/external/swing-analysis/swing-analysis.provider';
 import { SwingAnalysisRepository } from '@libs/dao/platform/swing-analysis/swing-analysis.repository';
 import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
 import { SwingAnalysis } from '@libs/dao/platform/swing-analysis/swing-analysis.entity';
-import { AbstractHttpService } from '@libs/common/networks/abstract-http-service';
-import { HttpService } from '@nestjs/axios';
+import { SwingAnalysisProvider } from '@libs/common/external/swing-analysis/swing-analysis.provider';
 
 @Injectable()
 export class SwingAnalysisService {
@@ -20,7 +18,7 @@ export class SwingAnalysisService {
    * 로컬 스윙 영상 업로드
    */
   async uploadLocalSwingFile(
-    file: any,
+    file: Express.Multer.File,
     userId: number,
   ): Promise<SwingAnalysisOutDto> {
     const form = new FormData();
@@ -62,7 +60,8 @@ export class SwingAnalysisService {
   /**
    * LLM 게이트웨이 호출 테스트용 메소드
    */
-  async testLlmGateway(): Promise<any> {
+  async testLLmGateway(): Promise<any> {
+    // env=test 가 아니면 실행 불가
     if (process.env.NODE_ENV !== 'test') {
       throw new Error('Invalid Environment');
     }

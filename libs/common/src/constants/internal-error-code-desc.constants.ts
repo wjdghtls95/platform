@@ -49,6 +49,7 @@ export const INTERNAL_ERROR_CODE_DESC = {
 
   // LLM
   [e.LLM_API_KEY_INVALID]: 'LLM API키가 유효하지않음',
+  [e.LLM_HTTP_ERROR]: 'LLM 게이트 웨이 통신 실패',
 
   // REDIS
   [e.REDIS_INVALID_OR_EXPIRED_TOKEN]:
