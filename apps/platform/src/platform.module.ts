@@ -13,7 +13,6 @@ import { UsersService } from './users/users.service';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AllExceptionFilter } from '@libs/common/filter/all-exception.filter';
 import { TransactionInterceptor } from '@libs/common/interceptor/transaction.interceptor';
-import { SecurityModule } from '@libs/common/security/security.module';
 import { OAuthGoogleService } from './auth/google/oauth-google.service';
 import { OAuth2Client } from 'google-auth-library';
 import { GolfCourseModule } from '@libs/dao/platform/golf-course/golf-course.module';
@@ -37,6 +36,7 @@ import { CalendarService } from './calendar/calendar.service';
 import { CalendarProvider } from '@libs/common/provider/calendar/calendar.provider';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PlatformSecurityModule } from '@libs/common/security/modules/platform-security.module';
 
 @Module({
   imports: [
@@ -58,7 +58,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     HttpModule.registerAsync({
       imports: [ConfigModule], // ConfigModule 사용
       useFactory: async (configService: ConfigService) => ({
-        baseURL: configService.get<string>('SWING_ANALYZER_URL'), // 기본 URL 설정 (http://localhost:3030)
+        baseURL: configService.get<string>('SWING_ANALYZER_URL'),
         headers: {
           // 모든 요청에 API 키 자동 주입
           'X-Internal-Api-Key': configService.get<string>(
@@ -77,7 +77,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     DefaultModule,
 
     // security
-    SecurityModule,
+    PlatformSecurityModule,
 
     // external
     KakaoModule,

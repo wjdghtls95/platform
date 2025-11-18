@@ -10,6 +10,7 @@ import { DefaultModule } from './default/default.module';
 import { ReservationEmailController } from './reservation-email/reservation-email.controller';
 import { ReservationEmailService } from './reservation-email/reservation-email.service';
 import { PlatformHttpClient } from './client/platform-http.client';
+import { IntegrationSecurityModule } from '@libs/common/security/modules/integration-security.module';
 
 @Module({
   imports: [
@@ -22,6 +23,8 @@ import { PlatformHttpClient } from './client/platform-http.client';
 
     // health check
     DefaultModule,
+
+    IntegrationSecurityModule,
   ],
   controllers: [ReservationEmailController],
   providers: [

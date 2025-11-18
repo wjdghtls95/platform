@@ -16,7 +16,7 @@ import { ApiKeyAuth } from '@libs/common/decorators/api-key-auth.decorator';
 @ApiTags('LLM Gateway')
 @Controller()
 @ApiKeyAuth()
-@UseInterceptors(UsageLoggerInterceptor) // 📊 컨트롤러 전체에 비용 로깅 인터셉터 적용
+@UseInterceptors(UsageLoggerInterceptor) // 컨트롤러 전체에 비용 로깅 인터셉터 적용
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 

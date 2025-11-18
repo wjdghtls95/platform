@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as FormData from 'form-data';
 import { SwingAnalysisRepository } from '@libs/dao/platform/swing-analysis/swing-analysis.repository';
 import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
@@ -16,27 +16,23 @@ export class SwingAnalysisService {
 
   /**
    * 로컬 스윙 영상 업로드
+   * TODO.. 유저 정보 조회 및 모델 결정을 보내야됨
+   * const user = await this.usersRepository.findById(userId);
+   * const modelName = 'gpt-4o-mini'; // 기본값 (추후 user.isPremium ? 'gpt-4o' : 'gpt-4o-mini' 로 확장 가능
    */
   async uploadLocalSwingFile(
     file: Express.Multer.File,
     userId: number,
   ): Promise<SwingAnalysisOutDto> {
-    const form = new FormData();
-
     // disk storage 사용시
     // form.append('file', fs.createReadStream(file.path));
+    const form = new FormData();
 
     // memory storage
     form.append('file', file.buffer, { filename: file.originalname });
 
-    const headers = form.getHeaders();
-
     // ai 스윙 분석 결과값
-    const result = await this.swingAnalysisProvider.post({
-      method: 'analyze',
-      data: form,
-      headers,
-    });
+    const result = await this.swingAnalysisProvider.postAnalyzeRequest(form);
 
     await this.swingAnalysisRepository.insert(
       SwingAnalysis.create({
@@ -68,6 +64,7 @@ export class SwingAnalysisService {
 
     // apps/llm-gateway/src/chat/dto/chat-out.dto.ts 참고
     const chatDto = {
+      userId: 1,
       provider: 'openai',
       model: 'gpt-4o-mini',
       analysisData: {
@@ -79,21 +76,10 @@ export class SwingAnalysisService {
       language: 'ko',
     };
 
-    try {
-      // 게이트웨이의 /chat 엔드포인트 호출
-      // (baseURL과 X-Internal-Api-Key 헤더는 platform.module.ts에서 자동 설정됨)
-      const result = this.swingAnalysisProvider.post({
-        method: 'chat',
-        data: chatDto,
-      });
+    const checkGatewayConnection =
+      await this.swingAnalysisProvider.checkGatewayConnection(chatDto);
 
-      // 게이트웨이로부터 받은 응답 (OpenAI의 답변)
-      return result;
-    } catch (e) {
-      Logger.error('LLM Gateway 호출 실패:', e.response?.data || e.message);
-
-      throw e;
-    }
+    return checkGatewayConnection;
   }
 
   /**

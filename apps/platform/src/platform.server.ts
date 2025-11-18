@@ -52,6 +52,7 @@ export class PlatformServer {
           'authToken',
         )
         .build();
+
       const document = SwaggerModule.createDocument(this.app, config);
 
       SwaggerModule.setup(

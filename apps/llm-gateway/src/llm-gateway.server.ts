@@ -53,11 +53,13 @@ export class LLMGatewayServer {
             type: 'apiKey',
             name: 'X-Internal-Api-Key', // Swagger UI가 이 이름으로 인식함
             in: 'header',
-            description: '내부 서비스 인증용 API 키를 입력하세요.',
+            description:
+              '내부 서비스 인증용 API 키를 입력하세요. (e.g., for Platform, Analyzer)',
           },
-          'api-key-auth',
-        ) // TODO.. add Bearer Auth 나중에 추가
+          'x-internal-api-key',
+        )
         .build();
+
       const document = SwaggerModule.createDocument(this.app, config);
 
       SwaggerModule.setup(

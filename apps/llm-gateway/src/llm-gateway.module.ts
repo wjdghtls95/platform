@@ -9,6 +9,8 @@ import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { AllExceptionFilter } from '@libs/common/filter/all-exception.filter';
 import { UsageLoggerInterceptor } from './cost/usage-logger.interceptor';
 import { LLMCacheModule } from './cache/llm-cache.module';
+import { LLmGatewaySecurityModule } from '@libs/common/security/modules/llm-gateway-security.module';
+
 /***
  * TODO.. 밑 어댑터 추후에 생성
  * import { ClaudeAdapter } from './providers/claude.adapter';
@@ -19,6 +21,10 @@ import { LLMCacheModule } from './cache/llm-cache.module';
   imports: [
     // config
     LLmGatewayServerConfigModule,
+
+    // security
+    LLmGatewaySecurityModule,
+
     LLMCacheModule, // LLMService 포함
   ],
   controllers: [ChatController],

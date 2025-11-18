@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsEnum,
   ValidateNested,
+  IsNotEmpty,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
@@ -42,6 +43,10 @@ export class ChatOutDto {
   @Type(() => SwingAnalysisDataDto) // 클래스 변환
   analysisData: SwingAnalysisDataDto;
 
+  @ApiProperty({ description: '요청 유저 ID' })
+  @IsNotEmpty()
+  userId: number;
+
   @ApiProperty({
     description: '응답 언어',
     enum: ['ko', 'en'],
@@ -68,7 +73,7 @@ export class ChatOutDto {
 
   @ApiProperty({
     description: 'Temperature (0-2)',
-    default: 0.7,
+    default: 0.4,
     required: false,
   })
   @IsOptional()
