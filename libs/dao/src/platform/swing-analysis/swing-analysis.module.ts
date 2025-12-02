@@ -7,8 +7,6 @@ import { SwingAnalysisProvider } from '@libs/common/external/swing-analysis/swin
 
 @Module({
   imports: [
-    HttpModule.register({ timeout: 5000, maxRedirects: 5 }),
-
     TypeOrmExModule.forFeatures(
       [SwingAnalysisRepository],
       [DATABASE_NAME.SWING_ANALYSIS],

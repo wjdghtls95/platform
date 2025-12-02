@@ -4,6 +4,7 @@ import { SwingAnalysisRepository } from '@libs/dao/platform/swing-analysis/swing
 import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
 import { SwingAnalysis } from '@libs/dao/platform/swing-analysis/swing-analysis.entity';
 import { SwingAnalysisProvider } from '@libs/common/external/swing-analysis/swing-analysis.provider';
+import { LLmGatewayProvider } from '@libs/common/external/llm-gateway/llm-gateway.provider';
 
 @Injectable()
 export class SwingAnalysisService {
@@ -12,6 +13,7 @@ export class SwingAnalysisService {
     private readonly swingAnalysisRepository: SwingAnalysisRepository,
 
     private readonly swingAnalysisProvider: SwingAnalysisProvider,
+    private readonly llmGatewayProvider: LLmGatewayProvider,
   ) {}
 
   /**
@@ -76,8 +78,7 @@ export class SwingAnalysisService {
       language: 'ko',
     };
 
-    const checkGatewayConnection =
-      await this.swingAnalysisProvider.checkGatewayConnection(chatDto);
+    const checkGatewayConnection = await this.llmGatewayProvider.chat(chatDto);
 
     return checkGatewayConnection;
   }

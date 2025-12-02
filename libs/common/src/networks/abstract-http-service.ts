@@ -3,65 +3,65 @@ import { firstValueFrom } from 'rxjs';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 
 export abstract class AbstractHttpService {
-  protected baseUrl?: string;
-  protected headers?: any;
-  protected data?: unknown;
-
   protected constructor(
     protected readonly httpService: HttpService,
-    protected readonly host: string,
-    protected readonly port?: number,
-  ) {
-    this.baseUrl = this?.port ? `${this.host}:${this.port}` : `${this.host}`;
-  }
+    protected readonly basePath: string = '',
+  ) {}
 
   /**
-   * http 조회 method
+   * Http Get method
    */
-  async get(options: {
+  async get<T = any>(options: {
     method: string;
     params?: Record<string, any>;
-  }): Promise<any> {
-    const url = `${this.baseUrl}/${options.method}`;
+    headers?: Record<string, any>;
+  }): Promise<T> {
+    const url = this.buildUrl(options.method);
 
     try {
       const response = await firstValueFrom(
         this.httpService.get(url, {
-          headers: this.headers,
+          headers: options.headers,
           params: options?.params,
         }),
       );
 
-      return response.data;
+      return response.data as T;
     } catch (e) {
       throw new ServerErrorException(e.status, e.statusText);
     }
   }
 
   /**
-   * http 수정 method
+   * Http Post method
    */
-  async post(options: {
+  async post<T = any>(options: {
     method: string;
     data?: any;
     headers?: any; // FormData 처럼 요청마다 동적으로 생성되는 headers가 필요
-  }): Promise<any> {
-    const url = `${this.baseUrl}/${options.method}`;
-
-    this.data = options.data || undefined;
+  }): Promise<T> {
+    const url = this.buildUrl(options.method);
 
     try {
       const response = await firstValueFrom(
-        this.httpService.post(url, this?.data, {
-          headers: options.headers || this.headers,
+        this.httpService.post(url, options.data, {
+          headers: options.headers,
         }),
       );
 
       return typeof response.data === 'object'
-        ? response.data
-        : JSON.parse(response.data);
+        ? (response.data as T)
+        : (JSON.parse(response.data) as T);
     } catch (e) {
       throw new ServerErrorException(e.status, e.statusText);
     }
+  }
+
+  /**
+   * basePath + method를 합쳐 최종 URL path를 만듦
+   */
+  protected buildUrl(method: string): string {
+    if (!this.basePath) return method.replace(/^\//, '');
+    return `${this.basePath.replace(/\/$/, '')}/${method.replace(/^\//, '')}`;
   }
 }

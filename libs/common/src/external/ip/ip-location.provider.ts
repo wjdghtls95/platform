@@ -1,13 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { AbstractHttpService } from '@libs/common/networks/abstract-http-service';
 import { HttpService } from '@nestjs/axios';
 import { ServerErrorException } from '@libs/common/exception/server-error.exception';
 import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
+import { HTTP_CLIENT_TOKENS } from '@libs/common/constants/http-client.constants';
 
 @Injectable()
 export class IpLocationProvider extends AbstractHttpService {
-  constructor(protected readonly httpService: HttpService) {
-    super(httpService, `${process.env.SEARCH_IP_URI}`);
+  constructor(
+    @Inject(HTTP_CLIENT_TOKENS.IP_LOCATION)
+    protected readonly ipLocationHttp: HttpService,
+  ) {
+    super(ipLocationHttp, ``);
   }
 
   /**
@@ -15,7 +19,7 @@ export class IpLocationProvider extends AbstractHttpService {
    */
   async getLocation(ip: string): Promise<{ lat: string; lng: string }> {
     try {
-      const response = await super.get({
+      const response = await this.get({
         method: `${ip}/json`,
       });
 

@@ -11,7 +11,11 @@ import { ClassConstructor } from 'class-transformer';
 import { getCustomRepository } from '@libs/common/databases/typeorm/typeorm-ex.module';
 
 export abstract class AbstractRepository<Entity> extends Repository<Entity> {
-  protected readonly alias: string = super.metadata.tableName;
+  // protected readonly alias: string = super.metadata.tableName;
+
+  protected get alias(): string {
+    return this.metadata.tableName;
+  }
 
   private get entityManager(): EntityManager {
     const queryRunner = TypeOrmHelper.getQueryRunner(

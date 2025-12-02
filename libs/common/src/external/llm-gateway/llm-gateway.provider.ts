@@ -1,45 +1,46 @@
-// import { Injectable } from '@nestjs/common';
-// import { HttpService } from '@nestjs/axios';
-// import { ConfigService } from '@nestjs/config';
-// import { firstValueFrom } from 'rxjs';
-// import { AbstractHttpService } from '../../networks/abstract-http-service';
-// import { SwingAnalysisOutDto } from '@libs/dao/platform/swing-analysis/dto/swing-analysis-out.dto';
-// import FormData from 'form-data';
-// import { ServerErrorException } from '@libs/common/exception/server-error.exception';
-// import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
-//
-// @Injectable()
-// export class SwingAnalysisProvider extends AbstractHttpService {
-//   private readonly timeout: number;
-//
-//   constructor(
-//     protected readonly httpService: HttpService,
-//     protected readonly configService: ConfigService,
-//   ) {
-//     super(httpService, configService.get<string>('SWING_ANALYZER_URL'));
-//     this.timeout = this.configService.get<number>(
-//       'SWING_ANALYZER_TIMEOUT',
-//       180000,
-//     );
-//   }
-//
-//   async postSwingAnalysis(formData: FormData): Promise<SwingAnalysisOutDto> {
-//     try {
-//       const response = await firstValueFrom(
-//         this.httpService.post(
-//           `${this.baseUrl}/swing-analysis/direct`,
-//           formData,
-//           {
-//             headers: {
-//               ...formData.getHeaders(),
-//             },
-//             timeout: this.timeout,
-//           },
-//         ),
-//       );
-//       return response.data;
-//     } catch (error) {
-//       throw new ServerErrorException(INTERNAL_ERROR_CODE.LLM_HTTP_ERROR);
-//     }
-//   }
-// }
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { AbstractHttpService } from '@libs/common/networks/abstract-http-service';
+import { HTTP_CLIENT_TOKENS } from '@libs/common/constants/http-client.constants';
+import { ServerErrorException } from '@libs/common/exception/server-error.exception';
+import { INTERNAL_ERROR_CODE } from '@libs/common/constants/internal-error-code.constants';
+
+/**
+ * 옮겨야됨
+ */
+export interface LlmChatDto {
+  userId: number;
+  provider: string;
+  model: string;
+  analysisData?: any;
+  language?: string;
+}
+
+@Injectable()
+export class LLmGatewayProvider extends AbstractHttpService {
+  private readonly logger = new Logger(LLmGatewayProvider.name);
+
+  constructor(
+    @Inject(HTTP_CLIENT_TOKENS.LLM_GATEWAY)
+    llmGatewayHttp: HttpService,
+  ) {
+    super(llmGatewayHttp, '');
+  }
+
+  /**
+   * LLM Gateway /chat 호출
+   * - SwingAnalysisService.testLlmGateway()에서 사용
+   */
+  async chat(chatDto: LlmChatDto): Promise<any> {
+    try {
+      const data = await this.post({
+        method: 'chat',
+        data: chatDto,
+      });
+      return data;
+    } catch (error: any) {
+      this.logger.error(`LlmGateway chat error: ${error.message}`, error.stack);
+      throw new ServerErrorException(INTERNAL_ERROR_CODE.LLM_HTTP_ERROR);
+    }
+  }
+}

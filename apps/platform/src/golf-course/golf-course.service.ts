@@ -27,13 +27,10 @@ export class GolfCourseService {
   ): Promise<SearchOutDto> {
     const { keyword, page, size } = searchPlaceInDto;
 
-    const response = await this.kakaoProvider.get({
-      method: 'keyword.json',
-      params: {
-        query: keyword,
-        page,
-        size,
-      },
+    const response = await this.kakaoProvider.searchByKeyword({
+      keyword,
+      page,
+      size,
     });
 
     return SearchOutDto.of({
@@ -51,16 +48,13 @@ export class GolfCourseService {
   ): Promise<SearchOutDto> {
     const { lng, lat, radius, category, page, size } = searchNearByInDto;
 
-    const response = await this.kakaoProvider.get({
-      method: 'category.json',
-      params: {
-        category_group_code: KAKAO_CATEGORY_CODE[category],
-        x: lng,
-        y: lat,
-        radius: radius, //
-        page,
-        size,
-      },
+    const response = await this.kakaoProvider.searchNearby({
+      categoryGroupCode: KAKAO_CATEGORY_CODE[category],
+      lng,
+      lat,
+      radius,
+      page,
+      size,
     });
 
     return SearchOutDto.of({

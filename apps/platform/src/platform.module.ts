@@ -34,9 +34,10 @@ import { ReservationService } from './reservation/reservation.service';
 import { CalendarController } from './calendar/calendar.controller';
 import { CalendarService } from './calendar/calendar.service';
 import { CalendarProvider } from '@libs/common/provider/calendar/calendar.provider';
-import { HttpModule } from '@nestjs/axios';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PlatformSecurityModule } from '@libs/common/security/modules/platform-security.module';
+import { HttpClientModule } from '@libs/common/external/http/http-client.module';
+import { platformHttpConfigs } from '@libs/common/external/http/configs/platform.http.config';
+import { LLmGatewayModule } from '@libs/common/external/llm-gateway/llm-gateway.module';
 
 @Module({
   imports: [
@@ -55,20 +56,21 @@ import { PlatformSecurityModule } from '@libs/common/security/modules/platform-s
 
     // TODO.. HTTP module custom 으로 변경고려 -> 여러 군데에서 통신을 하면 필요할듯
     // LLM 게이트웨이 전용 HttpModule 설정
-    HttpModule.registerAsync({
-      imports: [ConfigModule], // ConfigModule 사용
-      useFactory: async (configService: ConfigService) => ({
-        baseURL: configService.get<string>('SWING_ANALYZER_URL'),
-        headers: {
-          // 모든 요청에 API 키 자동 주입
-          'X-Internal-Api-Key': configService.get<string>(
-            'LLM_GATEWAY_API_KEY',
-          ),
-        },
-        timeout: 10000, // LLM 응답을 위해 타임아웃을 10초로 넉넉하게 설정
-      }),
-      inject: [ConfigService], // ConfigService 주입
-    }),
+    // HttpModule.registerAsync({
+    //   imports: [ConfigModule], // ConfigModule 사용
+    //   useFactory: async (configService: ConfigService) => ({
+    //     baseURL: configService.get<string>('SWING_ANALYZER_URL'),
+    //     headers: {
+    //       // 모든 요청에 API 키 자동 주입
+    //       'X-Internal-Api-Key': configService.get<string>(
+    //         'LLM_GATEWAY_API_KEY',
+    //       ),
+    //     },
+    //     timeout: 10000, // LLM 응답을 위해 타임아웃을 10초로 넉넉하게 설정
+    //   }),
+    //   inject: [ConfigService], // ConfigService 주입
+    // }),
+    HttpClientModule.forRoot(platformHttpConfigs),
 
     // Platform Redis Register
     RedisRepositoryModule,
@@ -82,6 +84,7 @@ import { PlatformSecurityModule } from '@libs/common/security/modules/platform-s
     // external
     KakaoModule,
     IpLocationModule,
+    LLmGatewayModule,
 
     // domain
     AuthModule,
